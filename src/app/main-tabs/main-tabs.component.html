@@ -1,0 +1,69 @@
+<div class="navbar-fixed">
+    <ul id="options-dropdown" class="dropdown-content">
+      <li><a class="black-text" href="#!">Regresar</a></li>
+      <li class="divider"></li>
+      <li><a class="black-text" href="#!">Cerrar sesión</a></li>
+    </ul>
+  <nav>
+    <div class="nav-wrapper light-green lighten-1">
+      <img id="libertalia-img" src="../assets/libertalia.png">
+      <ul class="right hide-on-med-and-down">
+        <li><a class="dropdown-button" data-constrainwidth="false" href="#!" data-activates="options-dropdown">Opciones<i class="material-icons right">arrow_drop_down</i></a></li>
+      </ul>
+    </div>
+  </nav>
+</div>
+
+<div class="container">
+  <ul class="tabs text-black">
+    <li class="tab col s4"><a class="black-text active" href="#students-tab">Alumnos</a></li>
+    <li class="tab col s4"><a class="black-text" href="#activities-tab">Actividades</a></li>
+  </ul>
+
+  <div id="students-tab">
+    <div class="input-field">
+      <input id="students-search" type="text" class="validate">
+      <label for="students-search">Filtrar por nombre</label>
+    </div>
+
+    <ul class="collapsible" data-collapsible="accordion">
+      <li>
+        <div class="collapsible-header"><i class="material-icons">person</i>Alumno 1</div>
+        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+      </li>
+      <li>
+        <div class="collapsible-header"><i class="material-icons">person</i>Alumno 2</div>
+        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+      </li>
+      <li>
+        <div class="collapsible-header"><i class="material-icons">person</i>Alumno 3</div>
+        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+      </li>
+    </ul>
+
+    <a class="waves-effect waves-light light-green lighten-1 btn">agregar nuevo alumno</a>
+  </div>
+  <div id="activities-tab">
+    <div class="input-field">
+      <input id="activities-search" type="text" class="validate">
+      <label for="activities-search">Filtrar por nombre</label>
+    </div>
+
+    <ul class="collapsible" data-collapsible="accordion">
+      <li>
+        <div class="collapsible-header"><i class="material-icons">assignment</i>Actividad 1</div>
+        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+      </li>
+      <li>
+        <div class="collapsible-header"><i class="material-icons">assignment</i>Actividad 2</div>
+        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+      </li>
+      <li>
+        <div class="collapsible-header"><i class="material-icons">assignment</i>Actividad 3</div>
+        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+      </li>
+    </ul>
+
+    <a class="waves-effect waves-light light-green lighten-1 btn">agregar nueva actividad</a>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+#libertalia-img {
+    height: 80%;
+    width: auto;
+    margin-top: 0.35rem;
+    margin-left: 1rem;
+}
+
+.container {
+    margin-top: 3rem;
+    max-width: 70%;
+    width: 70%;
+}
+
+.collection .collection-item.active {
+    background-color: #9ccc65;
+}
+
+.input-field input[type=text]:focus + label {
+    color: #000;
+}
+
+.input-field input[type=text]:focus {
+    border-bottom: 1px solid #000;
+    box-shadow: 0 1px 0 0 #000;
+}
