@@ -5,24 +5,15 @@
     transform: translate(-50%, -50%);
 }
 
-.input-field input[type=text]:focus + label {
+.input-field input:focus + label {
     color: #ff9100;
 }
 
-.input-field input[type=text]:focus {
+.input-field input:focus {
     border-bottom: 1px solid #ff9100;
     box-shadow: 0 1px 0 0 #ff9100;
-}
-
-.input-field input[type=password]:focus + label {
-    color: #ff9100;
 }
 
 .input-field .prefix.active {
     color: #ff9100;
-}
-
-.input-field input[type=password]:focus {
-    border-bottom: 1px solid #ff9100;
-    box-shadow: 0 1px 0 0 #ff9100;
 }
