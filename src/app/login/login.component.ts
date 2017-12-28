@@ -1,5 +1,4 @@
-import { RequiredFieldError } from './../common/errors/required-field-error';
-import { AuthService } from './../services/auth.service';
+import { AuthService } from './../services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
@@ -17,25 +16,25 @@ import { InvalidCredentialsError } from './../common/errors/invalid-credentials-
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  constructor(private authService: AuthService, private router: Router, private spinner: Ng4LoadingSpinnerService) {}
+  constructor(private authService: AuthService, private router: Router, private loadingSpinner: Ng4LoadingSpinnerService) {}
 
   ngOnInit() {
     this.authService.authenticatedRouting();
   }
 
   login(email, password) {
-    this.spinner.show();
+    this.loadingSpinner.show();
     this.authService.login(email.value, password.value)
       .then(
         response => {
-          this.router.navigate(['/cursos']);
+          this.router.navigate(['/selection']);
         },
         (error: AppError) => {
           if(error instanceof InvalidCredentialsError)
-            toast('Algo en la información que ingresaste está mal', toastDuration)
+            return toast('Algo en la información que ingresaste está mal', toastDuration)
         
           throw error;
         })
-        .then(() => this.spinner.hide(), () => this.spinner.hide());
+        .then(() => this.loadingSpinner.hide(), () => this.loadingSpinner.hide());
   }
 }

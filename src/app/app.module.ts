@@ -14,18 +14,24 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-import { CoursesComponent } from './courses/courses.component';
 import { MainTabsComponent } from './main-tabs/main-tabs.component';
+import { NavbarComponent } from './auth-wrapper/navbar/navbar.component';
+import { AuthWrapperComponent } from './auth-wrapper/auth-wrapper.component';
+import { SelectionComponent } from './selection/selection.component';
+import { SelectionCollectionComponent } from './selection/selection-collection/selection-collection.component';
 
-import { AuthService } from './services/auth.service';
+import { AuthService } from './services/auth/auth.service';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    CoursesComponent,
     MainTabsComponent,
+    NavbarComponent,
+    AuthWrapperComponent,
+    SelectionComponent,
+    SelectionCollectionComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { Observable } from 'rxjs/Observable';
 
 import { Router } from '@angular/router';
-
 import { AngularFireAuth } from 'angularfire2/auth';
 
-import { InvalidCredentialsError } from './../common/errors/invalid-credentials-error';
-import { AppError } from './../common/errors/app-error';
+import { InvalidCredentialsError } from './../../common/errors/invalid-credentials-error';
+import { AppError } from './../../common/errors/app-error';
 
 @Injectable()
 export class AuthService implements OnInit {
@@ -29,7 +28,7 @@ export class AuthService implements OnInit {
       if(inAuthRoutes)
         return;
 
-      this.router.navigate(['/cursos']);
+      this.router.navigate(['/selection']);
     } else {
       if(!inAuthRoutes)
         return;
@@ -38,17 +37,19 @@ export class AuthService implements OnInit {
     }
   }
 
+  isAuthenticated() { return localStorage.getItem('userInfo') !== null; }
+
   login(email, password) {
     return this.firebaseAuth.auth.signInWithEmailAndPassword(email, password)
-      .then(response => {
-        localStorage.setItem('userInfo', JSON.stringify(response));
+      .then(userAuthInfo => {
+        localStorage.setItem('userInfo', JSON.stringify(userAuthInfo));
       })
       .catch(this.handleError);
   }
 
   logout() {
     return this.firebaseAuth.auth.signOut()
-      .then(response => {
+      .then(() => {
         localStorage.removeItem('userInfo');
       })
       .catch(this.handleError);

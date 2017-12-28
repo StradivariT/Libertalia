@@ -1,6 +1,7 @@
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { CoursesComponent } from './courses/courses.component';
+import { AuthWrapperComponent } from './auth-wrapper/auth-wrapper.component';
+import { SelectionComponent } from './selection/selection.component';
 
 export const routes: Routes = [
     { 
@@ -8,7 +9,12 @@ export const routes: Routes = [
         component: LoginComponent 
     },
     { 
-        path: 'cursos', 
-        component: CoursesComponent 
+        path: 'selection', 
+        component: AuthWrapperComponent,
+        children: [
+            {
+                path: '', component: SelectionComponent
+            }
+        ]
     }
 ];
