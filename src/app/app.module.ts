@@ -7,6 +7,7 @@ import { MaterializeModule } from 'angular2-materialize';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireDatabaseModule } from 'angularfire2/database'
 
 import { environment } from './../environments/environment';
 import { routes } from './app.routes';
@@ -21,6 +22,8 @@ import { SelectionComponent } from './selection/selection.component';
 import { SelectionCollectionComponent } from './selection/selection-collection/selection-collection.component';
 
 import { AuthService } from './services/auth/auth.service';
+import { AuthGuard } from './services/auth/auth-guard.service';
+import { PreventLoginAccess } from './services/auth/prevent-login-access.service';
 
 
 @NgModule({
@@ -39,13 +42,16 @@ import { AuthService } from './services/auth/auth.service';
     MaterializeModule,
     AngularFireModule.initializeApp(environment.firebaseConfig, 'Libertalia'),
     AngularFireAuthModule,
+    AngularFireDatabaseModule,
     RouterModule,
     RouterModule.forRoot(routes),
     Ng4LoadingSpinnerModule.forRoot()
   ],
   providers: [
     { provide: ErrorHandler, useClass: AppErrorHandler },
-    AuthService    
+    AuthService,
+    AuthGuard,
+    PreventLoginAccess
   ],
   bootstrap: [AppComponent]
 })

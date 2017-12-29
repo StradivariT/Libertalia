@@ -21,22 +21,6 @@ export class AuthService implements OnInit {
       });
   }
 
-  authenticatedRouting() {
-    let inAuthRoutes: boolean = this.router.url !== "/";
-
-    if(localStorage.getItem('userInfo') !== null) {
-      if(inAuthRoutes)
-        return;
-
-      this.router.navigate(['/selection']);
-    } else {
-      if(!inAuthRoutes)
-        return;
-
-      this.router.navigate(['/'])
-    }
-  }
-
   isAuthenticated() { return localStorage.getItem('userInfo') !== null; }
 
   login(email, password) {
