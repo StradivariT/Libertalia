@@ -4,31 +4,31 @@
         <li>
           <div class="collapsible-header" (click)="chooseSelection(1)">
             <i class="material-icons">school</i>Plan educativo
-            <span class="badge" data-badge-caption="Licenciatura"></span>
+            <span class="badge">{{ contextSelected.educPlans }}</span>
           </div>
 
           <div class="collapsible-body">
-            <selection-collection *ngIf="selectionType == 1"></selection-collection>
+            <context-list *ngIf="contextTypeSelected == 1"></context-list>
           </div>
         </li>
         <li>
           <div class="collapsible-header" (click)="chooseSelection(2)">
             <i class="material-icons">assignment</i>Cursos
-            <span class="badge" data-badge-caption="Curso 2"></span>              
+            <span class="badge">{{ contextSelected.courses }}</span>              
           </div>
 
           <div class="collapsible-body">
-            <selection-collection *ngIf="selectionType == 2"></selection-collection>
+            <context-list *ngIf="contextTypeSelected == 2"></context-list>
           </div>
         </li>
         <li>
           <div class="collapsible-header" (click)="chooseSelection(3)">
             <i class="material-icons">people</i>Grupos
-            <span class="badge" data-badge-caption="Grupo 2"></span>              
+            <span class="badge">{{ contextSelected.groups }}</span>              
           </div>
           
           <div class="collapsible-body">
-            <selection-collection *ngIf="selectionType == 3"></selection-collection>
+            <context-list *ngIf="contextTypeSelected == 3"></context-list>
           </div>
         </li>
       </ul>

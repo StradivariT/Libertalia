@@ -10,7 +10,7 @@ export class PreventLoginAccess implements CanActivate {
   canActivate() {
     if(!this.authService.isAuthenticated()) return true;
 
-    this.router.navigate(['/selection']);
+    this.router.navigate(['/context']);
     return false;
   }
 }

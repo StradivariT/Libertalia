@@ -7,7 +7,7 @@ import { MaterializeModule } from 'angular2-materialize';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
-import { AngularFireDatabaseModule } from 'angularfire2/database'
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 
 import { environment } from './../environments/environment';
 import { routes } from './app.routes';
@@ -18,12 +18,14 @@ import { LoginComponent } from './login/login.component';
 import { MainTabsComponent } from './main-tabs/main-tabs.component';
 import { NavbarComponent } from './auth-wrapper/navbar/navbar.component';
 import { AuthWrapperComponent } from './auth-wrapper/auth-wrapper.component';
-import { SelectionComponent } from './selection/selection.component';
-import { SelectionCollectionComponent } from './selection/selection-collection/selection-collection.component';
+import { ContextComponent } from './context/context.component';
+import { ContextListComponent } from './context/context-list/context-list.component';
 
 import { AuthService } from './services/auth/auth.service';
 import { AuthGuard } from './services/auth/auth-guard.service';
 import { PreventLoginAccess } from './services/auth/prevent-login-access.service';
+import { ContextService } from './services/context/context.service';
+
 
 
 @NgModule({
@@ -33,8 +35,8 @@ import { PreventLoginAccess } from './services/auth/prevent-login-access.service
     MainTabsComponent,
     NavbarComponent,
     AuthWrapperComponent,
-    SelectionComponent,
-    SelectionCollectionComponent,
+    ContextComponent,
+    ContextListComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,7 +44,7 @@ import { PreventLoginAccess } from './services/auth/prevent-login-access.service
     MaterializeModule,
     AngularFireModule.initializeApp(environment.firebaseConfig, 'Libertalia'),
     AngularFireAuthModule,
-    AngularFireDatabaseModule,
+    AngularFirestoreModule,
     RouterModule,
     RouterModule.forRoot(routes),
     Ng4LoadingSpinnerModule.forRoot()
@@ -51,7 +53,8 @@ import { PreventLoginAccess } from './services/auth/prevent-login-access.service
     { provide: ErrorHandler, useClass: AppErrorHandler },
     AuthService,
     AuthGuard,
-    PreventLoginAccess
+    PreventLoginAccess,
+    ContextService
   ],
   bootstrap: [AppComponent]
 })

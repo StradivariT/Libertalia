@@ -24,6 +24,8 @@ export class AuthService implements OnInit {
   isAuthenticated() { return localStorage.getItem('userInfo') !== null; }
 
   login(email, password) {
+    console.log("What");
+
     return this.firebaseAuth.auth.signInWithEmailAndPassword(email, password)
       .then(userAuthInfo => {
         localStorage.setItem('userInfo', JSON.stringify(userAuthInfo));
