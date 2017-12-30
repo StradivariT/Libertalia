@@ -1,9 +1,8 @@
-import { AppErrorHandler } from './common/errors/app-error-handler';
-import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MaterializeModule } from 'angular2-materialize';
+import { RouterModule } from '@angular/router';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
@@ -26,6 +25,8 @@ import { AuthGuard } from './services/auth/auth-guard.service';
 import { PreventLoginAccess } from './services/auth/prevent-login-access.service';
 import { ContextService } from './services/context/context.service';
 
+import { AppErrorHandler } from './common/errors/app-error-handler';
+import { FilterPipe } from './common/pipes/filter-pipe';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { ContextService } from './services/context/context.service';
     AuthWrapperComponent,
     ContextComponent,
     ContextListComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule,

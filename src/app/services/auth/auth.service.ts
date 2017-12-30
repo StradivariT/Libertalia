@@ -12,20 +12,20 @@ import { AppError } from './../../common/errors/app-error';
 export class AuthService implements OnInit {
   authState: any = null;
 
-  constructor(private firebaseAuth: AngularFireAuth, private router: Router) { }
+  constructor(
+    private firebaseAuth: AngularFireAuth,
+    private router: Router) {}
 
-  ngOnInit() { 
+  ngOnInit(): void { 
     this.firebaseAuth.authState
       .subscribe(authentication => {
         this.authState = authentication;
       });
   }
 
-  isAuthenticated() { return localStorage.getItem('userInfo') !== null; }
+  isAuthenticated(): boolean { return localStorage.getItem('userInfo') !== null; }
 
-  login(email, password) {
-    console.log("What");
-
+  login(email, password): Promise<any> {
     return this.firebaseAuth.auth.signInWithEmailAndPassword(email, password)
       .then(userAuthInfo => {
         localStorage.setItem('userInfo', JSON.stringify(userAuthInfo));
@@ -33,7 +33,7 @@ export class AuthService implements OnInit {
       .catch(this.handleError);
   }
 
-  logout() {
+  logout(): Promise<any> {
     return this.firebaseAuth.auth.signOut()
       .then(() => {
         localStorage.removeItem('userInfo');
@@ -41,7 +41,7 @@ export class AuthService implements OnInit {
       .catch(this.handleError);
   }
 
-  private handleError(error) {
+  private handleError(error): Promise<AppError> {
     if(error.code === "auth/user-not-found" || error.code === "auth/wrong-password")
       return Promise.reject(new InvalidCredentialsError());
 

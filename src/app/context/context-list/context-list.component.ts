@@ -1,16 +1,15 @@
-import { ContextComponent } from './../context.component';
 import { Component, OnInit } from '@angular/core';
 
-import { ContextService } from './../../services/context/context.service';
-
-import { Observable } from 'rxjs/Observable';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
-import { contexts } from '../context.component';
+import { ContextComponent } from './../context.component';
+import { ContextService } from './../../services/context/context.service';
 
-export interface Context {
-  name: string
-}
+const mainContexts = {
+  educPlan: 0,
+  courses: 1,
+  groups: 2
+};
 
 @Component({
   selector: 'context-list',
@@ -18,16 +17,36 @@ export interface Context {
   styleUrls: ['./context-list.component.css']
 })
 export class ContextListComponent extends ContextComponent implements OnInit {
-  contextList: Observable<{} | Context[]>
+  contextList: any[];
 
-  constructor(private service: ContextService, private loadingSpinner: Ng4LoadingSpinnerService) { super(); }
+  constructor(
+    service: ContextService,
+    loadingSpinner: Ng4LoadingSpinnerService) { super(service, loadingSpinner); }
 
   ngOnInit() {
-    this.contextList = this.service.getContext()
-                        .catch(error => { throw error });
+    // this.loadingSpinner.show();
+
+    if(ContextComponent.currentContext == mainContexts.educPlan)
+      return this.getEducPlans()
   }
 
-  selectContext(context) {
-    ContextComponent.contextSelected[contexts[ContextComponent.contextType]] = context;
+  getEducPlans(): void {
+    this.service.getEducPlans()
+      .subscribe(
+        educPlans => {
+          this.loadingSpinner.hide();
+
+          this.contextList = educPlans;
+        },
+        error => {
+          this.loadingSpinner.hide();
+
+          throw error;
+        });
+  }
+
+  selectContext(contextId, contextName): void {
+    ContextComponent.contextLabel[ContextComponent.currentContext] = contextName;
+    ContextComponent.contextSelected[ContextComponent.currentContext] = contextId;
   }
 }

@@ -1,34 +1,50 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-export const contexts = {
-  1: 'educPlans',
-  2: 'courses',
-  3: 'groups'
-};
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+
+import { ContextService } from '../services/context/context.service';
 
 @Component({
   selector: 'context',
   templateUrl: './context.component.html',
   styleUrls: ['./context.component.css']
 })
-export class ContextComponent {
-  @Input('data-badge-caption') dataBadgeCaption: string;
-
-  static contextType: number;
-  contextTypeSelected: number;  
-
+export class ContextComponent implements OnInit {
+  mainContexts: any[];
+  static currentContext: number;
+  static contextLabel = {
+    0: "-",
+    1: "-",
+    2: "-"
+  };
   static contextSelected = {
-    educPlans: "-",
-    courses: "-",
-    groups: "-"
-  }
-  
-  chooseSelection(type) {
-    ContextComponent.contextType = type;
-    this.contextTypeSelected = type;
+    0: "",
+    1: "",
+    2: ""
   }
 
-  get contextSelected() {
-    return ContextComponent.contextSelected;
+  constructor(
+    protected service: ContextService,
+    protected loadingSpinner: Ng4LoadingSpinnerService) {}
+
+  ngOnInit() {
+    this.loadingSpinner.show();
+
+    this.service.getMainContexts()
+      .subscribe(
+        mainContexts => {
+          this.loadingSpinner.hide();
+          this.mainContexts = mainContexts;
+        },
+        error => {
+          this.loadingSpinner.hide();
+          throw error;
+        });
   }
+
+  setCurrentContext(contextIndex): void { ContextComponent.currentContext = contextIndex; }
+
+  get currentContext() { return ContextComponent.currentContext; }
+  get contextLabel() { return ContextComponent.contextLabel; }
+  get contextSelected() { return ContextComponent.contextSelected; }
 }

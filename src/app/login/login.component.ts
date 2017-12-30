@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import { Router } from '@angular/router';
 
 import { toast } from 'angular2-materialize';
@@ -17,15 +16,16 @@ import { InvalidCredentialsError } from './../common/errors/invalid-credentials-
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  constructor(private authService: AuthService, private router: Router, private loadingSpinner: Ng4LoadingSpinnerService) {}
+  constructor(
+      private authService: AuthService,
+      private router: Router,
+      private loadingSpinner: Ng4LoadingSpinnerService) {}
 
-  login(email, password) {
+  login(email, password): void {
     this.loadingSpinner.show();
     this.authService.login(email.value, password.value)
       .then(
-        response => {
-          this.router.navigate(['/selection']);
-        },
+        () => this.router.navigate(['/context']),
         (error: AppError) => {
           if(error instanceof InvalidCredentialsError)
             return toast('Algo en la información que ingresaste está mal', toastDuration)

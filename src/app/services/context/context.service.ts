@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-
-import { ContextComponent } from './../../context/context.component';
-import { Context } from '../../context/context-list/context-list.component';
-import { contexts } from '../../context/context.component'
+import { AngularFirestore } from 'angularfire2/firestore';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
+import 'rxjs/observable/throw';
 
 import { AppError } from '../../common/errors/app-error';
 
@@ -15,13 +12,29 @@ import { AppError } from '../../common/errors/app-error';
 export class ContextService {
   constructor(private firestore: AngularFirestore) { }
 
-  getContext(): Observable<Context[]> {
-    return this.firestore.collection(contexts[ContextComponent.contextType])
+  getMainContexts(): Observable<any> {
+    return this.firestore
+      .collection('contexts', ref => ref.orderBy('order'))
       .valueChanges()
       .catch(this.handleError);
   }
 
-  private handleError(error) {
+  getEducPlans(): Observable<any> {
+    return this.firestore
+      .collection('educPlans', ref => ref.orderBy('name', 'desc'))
+      .snapshotChanges()
+      .map(educPlansActions => {
+        return educPlansActions.map(educPlan => {
+          const id = educPlan.payload.doc.id;
+          const data = educPlan.payload.doc.data();
+
+          return { id, data };
+        });
+      })
+      .catch(this.handleError);
+  }
+
+  private handleError(error): Observable<AppError> {
     return Observable.throw(new AppError());
   }
 }
