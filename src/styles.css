@@ -1,1 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    background-color: #fcfcfc;    
+}
+
+.input-field input:focus + label {
+    color: #ff9100 !important;
+}
+
+.input-field input:focus {
+    border-bottom: 1px solid #ff9100 !important;
+    box-shadow: 0 1px 0 0 #ff9100 !important;
+}
+
+.input-field .prefix.active {
+    color: #ff9100;
+}
