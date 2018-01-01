@@ -3,3 +3,7 @@
     max-width: 70%;
     width: 70%;
 }
+
+.collection .collection-item.active {
+    background-color: #bdbdbd;
+}

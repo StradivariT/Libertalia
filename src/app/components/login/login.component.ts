@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { toast } from 'angular2-materialize';
-import { toastDuration } from './../../environments/environment';
+import { toastDuration } from './../../../environments/environment';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
-import { AuthService } from './../services/auth/auth.service';
+import { AuthService } from './../../services/auth/auth.service';
 
-import { AppError } from './../common/errors/app-error';
-import { InvalidCredentialsError } from './../common/errors/invalid-credentials-error';
+import { AppError } from './../../common/errors/app-error';
+import { InvalidCredentialsError } from './../../common/errors/invalid-credentials-error';
 
 @Component({
   selector: 'login',

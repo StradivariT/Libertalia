@@ -13,12 +13,11 @@ import { routes } from './app.routes';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './components/login/login.component';
 import { MainTabsComponent } from './main-tabs/main-tabs.component';
-import { NavbarComponent } from './auth-wrapper/navbar/navbar.component';
-import { AuthWrapperComponent } from './auth-wrapper/auth-wrapper.component';
-import { ContextComponent } from './context/context.component';
-import { ContextListComponent } from './context/context-list/context-list.component';
+import { NavbarComponent } from './components/auth-wrapper/navbar/navbar.component';
+import { AuthWrapperComponent } from './components/auth-wrapper/auth-wrapper.component';
+import { ContextComponent } from './components/context/context.component';
 
 import { AuthService } from './services/auth/auth.service';
 import { AuthGuard } from './services/auth/auth-guard.service';
@@ -37,7 +36,6 @@ import { FilterPipe } from './common/pipes/filter-pipe';
     NavbarComponent,
     AuthWrapperComponent,
     ContextComponent,
-    ContextListComponent,
     FilterPipe
   ],
   imports: [

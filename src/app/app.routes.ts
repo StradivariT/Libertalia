@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 
-import { LoginComponent } from './login/login.component';
-import { AuthWrapperComponent } from './auth-wrapper/auth-wrapper.component';
-import { ContextComponent } from './context/context.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthWrapperComponent } from './components/auth-wrapper/auth-wrapper.component';
+import { ContextComponent } from './components/context/context.component';
 
 import { AuthGuard } from './services/auth/auth-guard.service';
 import { PreventLoginAccess } from './services/auth/prevent-login-access.service';
