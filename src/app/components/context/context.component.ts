@@ -2,14 +2,12 @@ import { Component, OnInit } from '@angular/core';
 
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
-import { ContextService } from '../../services/context/context.service';
+import { ContextService } from './../../services/context/context.service';
 
 import { MainContext } from './../../common/interfaces/MainContext';
 import { SubContext } from './../../common/interfaces/SubContext';
 
 import { FilterPipe } from './../../common/pipes/filter-pipe';
-
-import 'rxjs/add/operator/finally';
 
 @Component({
   selector: 'context',

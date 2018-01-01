@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 
@@ -41,6 +41,9 @@ export class ContextService {
     if(mainContext == 0) {
       this.subContextCollection = this.firestore.collection(currentSubcontext.path);
     } else {
+      if(!subContext[mainContext - 1])
+        return Observable.of(null);
+
       let mainContextRef = this.firestore.doc(currentSubcontext.docRef + '/' + subContext[mainContext - 1].id).ref;
       this.subContextCollection = this.firestore.collection(currentSubcontext.path, ref => ref.where(currentSubcontext.docRef + 'Doc', '==', mainContextRef));
     }
