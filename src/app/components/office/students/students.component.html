@@ -1,0 +1,141 @@
+<!-- Students filter -->
+<div class="input-field">
+  <input id="students-search" type="text" class="validate">
+  <label for="students-search">Filtrar por nombre</label>
+</div>
+
+<!-- Students body -->
+<ul class="collapsible" data-collapsible="expandable">
+  <li>
+    <div class="collapsible-header">
+      <i class="material-icons">person</i>Alumno 1
+    </div>
+
+    <div class="collapsible-body">
+      <!-- Assignment filter -->
+      <div class="input-field">
+        <input id="activityFilter" type="text">
+        <label for="activityFilter">Nombre de la actividad</label>
+      </div>
+
+      <!-- Assignmnets body -->
+      <ul class="collapsible" data-collapsible="expandable">
+        <li>
+          <div class="collapsible-header">
+            <i class="material-icons">assignment</i>Actividad 1
+          </div>
+
+          <div class="collapsible-body">
+            <!-- File turned in and date -->
+            <div class="row">
+               <!-- File turned in -->
+              <div class="col s6">
+                <div class="input-field">
+                  <i
+                    materialize="tooltip"
+                    class="material-icons prefix tooltiped"
+                    data-position="bottom"
+                    data-delay="30"
+                    data-tooltip="Da click para descargar archivo">attachment</i>
+                  <input
+                    disabled
+                    id="activityFilter"
+                    type="text"
+                    value="Nombre del archivo.doc">
+                  <label for="activityFilter">Archivo entregado</label>
+                </div>
+              </div>
+
+              <!-- Date -->
+              <div class="col s6">
+                <div class="input-field">
+                  <i class="material-icons prefix">date_range</i>
+                  <input
+                    materialize="pickadate"
+                    class="datepicker"
+                    type="text"
+                    placeholder="Fecha de entrega">
+                </div>
+              </div>
+            </div>
+
+            <!-- Feedback -->
+            <div class="row">
+              <div class="input-field">
+                <i class="material-icons prefix">feedback</i>
+                <textarea id="textarea1" class="materialize-textarea">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Ut deleniti earum tempore, cum quas neque perspiciatis similique voluptatibus officiis cupiditate animi eos tempora.
+                  Expedita optio cumque iste dolorem, explicabo a!
+                </textarea>
+                <label for="textarea1">Retroalimentación</label>
+              </div>
+            </div>
+
+            <!-- Grade and incidents -->
+            <div class="row">
+              <!-- Grade -->
+              <div class="col s6">
+                <div class="input-field">
+                  <i class="material-icons prefix">assignment_turned_in</i>
+                  <input
+                    id="grade"
+                    class="validate"
+                    type="number"
+                    min="0"
+                    max="100">
+                  <label for="grade">Calificación</label>
+                </div>
+              </div>
+              <!-- Incidents -->
+              <div class="col s6">
+                <div class="input-field">
+                  <i class="material-icons prefix">assignment_late</i>
+                  <label for="incidents">Incidencias</label>
+                  <div
+                    materialize="material_chip"
+                    id="incidents"
+                    class="chips chips-placeholder"></div>
+                </div>
+              </div>
+            </div>
+
+            <button class="waves-effect waves-light blue darken-3 btn">guardar cambios</button>
+            <button class="waves-effect waves-light red darken-3 btn right">eliminar actividad</button>
+          </div>
+        </li>
+      </ul>
+
+      <div class="new-activity-form">
+        <div class="row">
+          <div class="col s6">
+            <div class="file-field input-field">
+              <div class="waves-effect waves-light orange darken-3 btn">
+                archivo de la actividad
+                <input type="file">
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="col s6">
+            <div class="input-field">
+              <i class="material-icons prefix">date_range</i>
+              <input
+                materialize="pickadate"
+                class="datepicker"
+                type="text"
+                placeholder="Fecha de entrega">
+            </div>
+          </div>
+        </div>
+
+        <button class="waves-effect waves-light blue darken-3 btn">agregar nueva actividad</button>
+      </div>
+    </div>
+  </li> 
+</ul>
+
+<a class="waves-effect waves-light blue darken-3 btn">agregar nuevo alumno</a>

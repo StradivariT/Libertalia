@@ -18,7 +18,8 @@ export class ContextComponent implements OnInit {
   mainContexts:         MainContext[];
   subContexts:          SubContext[];
   subContextSelected:   SubContext[];
-  contextFilter:        string; 
+  contextFilter:        string;
+  preventiveMessages:   string[];
 
   constructor(
     private contextService: ContextService,
@@ -27,6 +28,10 @@ export class ContextComponent implements OnInit {
   ngOnInit() {
     this.subContextSelected = [];
     this.contextFilter = '';
+    this.preventiveMessages = [
+      'Selecciona un plan educativo primero.',
+      'Selecciona un curso primero.'
+    ];
 
     this.loadingSpinner.show();
     this.contextService.getMainContexts()

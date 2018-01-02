@@ -19,18 +19,21 @@
                     *ngFor="let subContext of subContexts | filter: contextFilter"
                     (click)="selectSubcontext(mainContext.order, subContext)"
                     [class.active]="subContext.id == subContextSelected[mainContext.order]?.id"
-                    class="collection-item waves-effect waves-light black-text">{{ subContext.name }}</a>
+                    class="collection-item waves-effect waves-light black-text">
+                  {{ subContext.name }}
+                  </a>
                 </div>
     
                 <button
                   *ngIf="subContexts && (subContexts | filter: contextFilter).length == 0"
                   (click)="addSubcontext(mainContext.order)"
                   [disabled]="contextFilter.length < 1"
-                  class="waves-effect waves-light blue darken-3 btn">agregar a {{ mainContext.name }}</button>
+                  class="waves-effect waves-light blue darken-3 btn">
+                agregar a {{ mainContext.name }}
+                </button>
               </div>
               <div *ngIf="!subContexts && mainContext.order > 0">
-                <h5 *ngIf="mainContext.order == 1">Selecciona un plan educativo primero.</h5>
-                <h5 *ngIf="mainContext.order == 2">Selecciona un curso primero.</h5>
+                <h5>{{ preventiveMessages[mainContext.order - 1] }}</h5>
               </div>
           </div>
         </li>
@@ -38,6 +41,8 @@
   
       <button
         [disabled]="subContextSelected.length < 3"
-        class="waves-effect waves-light blue darken-3 btn">confirmar</button>    
+        class="waves-effect waves-light blue darken-3 btn">
+      confirmar
+      </button>    
   </div>
 </div>
