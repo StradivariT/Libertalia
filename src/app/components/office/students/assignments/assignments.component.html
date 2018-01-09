@@ -1,0 +1,132 @@
+<!-- Assignment filter -->
+<div class="input-field">
+  <input id="assignmentFilter" type="text" [(ngModel)]="assignmentFilter">
+  <label for="assignmentFilter">Nombre de la actividad</label>
+</div>
+
+<!-- Assignmnets body -->
+<ul materialize="collapsible" class="collapsible" data-collapsible="expandable">
+  <li *ngFor="let assignment of assignments | filter: assignmentFilter">
+    <div class="collapsible-header">
+      <i class="material-icons">assignment</i>{{ assignment.name }}
+    </div>
+
+    <div class="collapsible-body">
+      <!-- File turned in and date -->
+      <div class="row">
+          <!-- File turned in -->
+        <div class="col s6">
+          <div class="input-field">
+            <a [href]="assignment.file.fileURL" class="material-icons prefix file-download">
+              <span
+              materialize="tooltip"
+              class=" tooltiped"
+              data-position="bottom"
+              data-delay="30"
+              data-tooltip="Da click para descargar archivo">attachment</span>
+            </a>
+            
+            <input
+              disabled
+              id="fileSubmited"
+              type="text"
+              [value]="assignment.file.fileName">
+            <label for="fileSubmited">Archivo entregado</label>
+          </div>
+        </div>
+
+        <!-- Date -->
+        <div class="col s6">
+          <div class="input-field">
+            <i class="material-icons prefix">date_range</i>
+            <input
+              materialize="pickadate"
+              class="datepicker"
+              id="assignmentDate"
+              type="text"
+              [materializeParams]="[{format: 'dd/mm/yyyy'}]"
+              [(ngModel)]="assignment.date"
+              placeholder="Fecha de entrega">
+              <label for="assignmentDate">Fecha de entrega</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="row">
+        <div class="input-field">
+          <i class="material-icons prefix">feedback</i>
+          <textarea id="textarea1" class="materialize-textarea">{{ assignment.feedback }}</textarea>
+          <label for="textarea1">Retroalimentación</label>
+        </div>
+      </div>
+
+      <!-- Grade and incidents -->
+      <div class="row">
+        <!-- Grade -->
+        <div class="col s6">
+          <div class="input-field">
+            <i class="material-icons prefix">assignment_turned_in</i>
+            <input
+              id="grade"
+              type="number"
+              [value]="assignment.grade"
+              min="0"
+              max="100">
+            <label for="grade">Calificación</label>
+          </div>
+        </div>
+        <!-- Incidents -->
+        <div class="col s6">
+          <div class="input-field">
+            <i 
+              class="material-icons prefix tooltiped"
+              materialize="tooltip"
+              data-position="top"
+              data-delay="30"
+              data-tooltip="Incidencias">
+            assignment_late</i>
+            <div
+              materialize="material_chip"
+              [materializeParams]="[assignment]"
+              id="incidents"
+              class="chips">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="waves-effect waves-light blue darken-3 btn">guardar cambios</button>
+      <button class="waves-effect waves-light red darken-3 btn right">eliminar actividad</button>
+    </div>
+  </li>
+</ul>
+
+<div *ngIf="assignments && (assignments | filter: assignmentFilter).length == 0" class="new-activity-form">
+  <div class="row">
+    <div class="col s6">
+      <div class="file-field input-field">
+        <div class="waves-effect waves-light orange darken-3 btn">
+          archivo de la actividad
+          <input type="file">
+        </div>
+        <div class="file-path-wrapper">
+          <input class="file-path validate" type="text">
+        </div>
+      </div>
+    </div>
+
+    <div class="col s6">
+      <div class="input-field">
+        <i class="material-icons prefix">date_range</i>
+        <input
+          materialize="pickadate"
+          class="datepicker"
+          type="text"
+          placeholder="Fecha de entrega">
+      </div>
+    </div>
+  </div>
+
+  <button class="waves-effect waves-light blue darken-3 btn">agregar nueva actividad</button>
+</div>

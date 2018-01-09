@@ -17,16 +17,19 @@ import { LoginComponent } from './components/login/login.component';
 import { NavbarComponent } from './components/auth-wrapper/navbar/navbar.component';
 import { AuthWrapperComponent } from './components/auth-wrapper/auth-wrapper.component';
 import { ContextComponent } from './components/context/context.component';
+import { OfficeComponent } from './components/office/office.component';
+import { StudentsComponent } from './components/office/students/students.component';
+import { AssignmentsComponent } from './components/office/students/assignments/assignments.component';
 
 import { AuthService } from './services/auth/auth.service';
 import { AuthGuard } from './services/auth/auth-guard.service';
 import { PreventLoginAccess } from './services/auth/prevent-login-access.service';
 import { ContextService } from './services/context/context.service';
+import { StudentsService } from './services/students/students.service';
+import { AssignmentsService } from './services/assignments/assignments.service';
 
 import { AppErrorHandler } from './common/errors/app-error-handler';
 import { FilterPipe } from './common/pipes/filter-pipe';
-import { OfficeComponent } from './components/office/office.component';
-import { StudentsComponent } from './components/office/students/students.component';
 
 
 @NgModule({
@@ -38,7 +41,8 @@ import { StudentsComponent } from './components/office/students/students.compone
     ContextComponent,
     FilterPipe,
     OfficeComponent,
-    StudentsComponent
+    StudentsComponent,
+    AssignmentsComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +60,9 @@ import { StudentsComponent } from './components/office/students/students.compone
     AuthService,
     AuthGuard,
     PreventLoginAccess,
-    ContextService
+    ContextService,
+    StudentsService,
+    AssignmentsService
   ],
   bootstrap: [AppComponent]
 })

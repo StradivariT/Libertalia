@@ -1,0 +1,9 @@
+.file-download:hover {
+    cursor: pointer;
+}
+
+.file-download {
+    text-decoration: none;
+    color: black;
+    font-style: normal !important;
+}

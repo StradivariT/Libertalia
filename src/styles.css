@@ -24,3 +24,7 @@ body {
 .input-field .prefix.active {
     color: #ff9100;
 }
+
+.indicator {
+    background-color: #ff9100 !important;
+}

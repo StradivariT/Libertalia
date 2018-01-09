@@ -1,9 +1,13 @@
 .container {
-    margin-top: 3rem;    
+    margin-top: 1rem;    
     max-width: 90%;
     width: 90%;
 }
 
 .input-field {
     margin-top:2rem;
+}
+
+.modal-trigger:hover {
+    cursor: pointer;
 }

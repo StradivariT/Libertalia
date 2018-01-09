@@ -27,7 +27,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'office/students',
+        path: 'office/students/:courseName/:courseId/:groupName/:groupId',
         component: AuthWrapperComponent,
         children: [
             {
