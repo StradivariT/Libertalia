@@ -4,10 +4,10 @@ export interface Assignment {
     id?: string;
     name: string;
     date: string;
-    feedback: string;
-    incidents: string[];
+    feedback?: string;
+    incidents?: string[];
     data?: Incident[];
-    grade: number;
+    grade?: number;
     file?: {
         fileName?: string;
         fileURL?: string;

@@ -5,7 +5,7 @@
 </div>
 
 <!-- Assignmnets body -->
-<ul materialize="collapsible" class="collapsible" data-collapsible="expandable">
+<ul materialize="collapsible" *ngIf="assignments && (assignments | filter: assignmentFilter).length != 0" class="collapsible" data-collapsible="expandable">
   <li *ngFor="let assignment of assignments | filter: assignmentFilter">
     <div class="collapsible-header">
       <i class="material-icons">assignment</i>{{ assignment.name }}
@@ -17,7 +17,7 @@
           <!-- File turned in -->
         <div class="col s6">
           <div class="input-field">
-            <a [href]="assignment.file.fileURL" class="material-icons prefix file-download">
+            <a [href]="assignment.file.fileURL" target="_blank" class="material-icons prefix file-download">
               <span
               materialize="tooltip"
               class=" tooltiped"
@@ -108,7 +108,7 @@
       <div class="file-field input-field">
         <div class="waves-effect waves-light orange darken-3 btn">
           archivo de la actividad
-          <input type="file">
+          <input type="file" (change)="setFile($event)">
         </div>
         <div class="file-path-wrapper">
           <input class="file-path validate" type="text">
@@ -123,10 +123,11 @@
           materialize="pickadate"
           class="datepicker"
           type="text"
+          [(ngModel)]="newAssignment.date"
           placeholder="Fecha de entrega">
       </div>
     </div>
   </div>
 
-  <button class="waves-effect waves-light blue darken-3 btn">agregar nueva actividad</button>
+  <button class="waves-effect waves-light blue darken-3 btn" (click)="addAssignment()">agregar nueva actividad</button>
 </div>

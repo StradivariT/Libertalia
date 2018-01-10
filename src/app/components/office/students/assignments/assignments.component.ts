@@ -17,6 +17,8 @@ export class AssignmentsComponent implements OnInit {
   @Input() studentId: string;
   assignments: Assignment[];
   assignmentFilter: string;
+  newAssignment: Assignment;
+  newAssignmentFile: File;
 
   constructor(
     private assignmentsService: AssignmentsService,
@@ -27,16 +29,29 @@ export class AssignmentsComponent implements OnInit {
     this.assignmentFilter = '';
     this.loadingSpinner.show();
 
+    this.newAssignment = {
+      name: '',
+      date: null
+    }
+
     this.assignmentsService.getAssignments(this.studentId)
       .subscribe(
         assignments => {
           this.loadingSpinner.hide();
           this.assignments = assignments;
-
-          console.log(this.assignments)
         },
         this.handleError
       );
+  }
+
+  setFile(event) {
+    this.newAssignmentFile = event.srcElement.files[0];
+  }
+
+  addAssignment() {
+    this.newAssignment.name = this.assignmentFilter;
+    
+    this.assignmentsService.addAssignment(this.newAssignment, this.newAssignmentFile);
   }
 
   private handleError(error) {

@@ -7,15 +7,25 @@ import 'rxjs/add/observable/throw';
 import { Assignment } from './../../common/interfaces/Assignment';
 
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
+import * as firebase from 'firebase';
 
 import { AppError } from '../../common/errors/app-error';
+import { FirebaseApp } from 'angularfire2';
+
 
 @Injectable()
 export class AssignmentsService {
   private studentDoc: AngularFirestoreDocument<any>;
   private assignmentsCollection: AngularFirestoreCollection<Assignment>;
+  private assignmentsStorage: any;
+  private firebaseApp: FirebaseApp
 
-  constructor(private firestore: AngularFirestore) {}
+  constructor(
+    private firestore: AngularFirestore,
+    firebaseApp: FirebaseApp
+  ) {
+    this.firebaseApp = firebaseApp;
+  }
 
   getAssignments(studentId): Observable<any> {
     this.studentDoc = this.firestore.doc('students/' + studentId);
@@ -25,6 +35,23 @@ export class AssignmentsService {
       .snapshotChanges()
       .map(this.handleSnapshots)
       .catch(this.handleObservableError);
+  }
+
+  addAssignment(assignment, assignmentFile) {
+    this.assignmentsStorage = this.firebaseApp.storage().ref();
+    let uploadTask = this.assignmentsStorage.child('/assignmentsFiles/test/' + assignmentFile.name).put(assignmentFile);
+
+    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        console.log(snapshot.bytesTransferred / snapshot.totalBytes * 100);    
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        console.log("success!");
+      }
+    );
   }
 
   private handleSnapshots(changes): Assignment[] {

@@ -31,7 +31,6 @@ import { AssignmentsService } from './services/assignments/assignments.service';
 import { AppErrorHandler } from './common/errors/app-error-handler';
 import { FilterPipe } from './common/pipes/filter-pipe';
 
-
 @NgModule({
   declarations: [
     AppComponent,
