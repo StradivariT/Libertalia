@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
+import 'firebase/storage';
 
 import { environment } from './../environments/environment';
 import { routes } from './app.routes';

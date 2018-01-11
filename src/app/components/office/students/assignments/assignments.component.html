@@ -12,6 +12,15 @@
     </div>
 
     <div class="collapsible-body">
+      <!-- File name -->
+      <div class="row">
+        <div class="input-field">
+          <i class="material-icons prefix">description</i>
+          <input id="assignmentName" type="text" [(ngModel)]="assignment.name" [value]="assignment.name">
+          <label for="assignmentName">Nombre de la actividad</label>
+        </div>
+      </div>
+      
       <!-- File turned in and date -->
       <div class="row">
           <!-- File turned in -->
@@ -47,7 +56,7 @@
               [materializeParams]="[{format: 'dd/mm/yyyy'}]"
               [(ngModel)]="assignment.date"
               placeholder="Fecha de entrega">
-              <label for="assignmentDate">Fecha de entrega</label>
+              <label for="assignmentDate">Fecha entragada</label>
           </div>
         </div>
       </div>
@@ -55,7 +64,7 @@
       <!-- Feedback -->
       <div class="row">
         <div class="input-field">
-          <i class="material-icons prefix">feedback</i>
+          <i class="material-icons prefix">question_answer</i>
           <textarea id="textarea1" class="materialize-textarea">{{ assignment.feedback }}</textarea>
           <label for="textarea1">Retroalimentación</label>
         </div>
@@ -108,7 +117,7 @@
       <div class="file-field input-field">
         <div class="waves-effect waves-light orange darken-3 btn">
           archivo de la actividad
-          <input type="file" (change)="setFile($event)">
+          <input type="file" (change)="setAssignmentFile($event)">
         </div>
         <div class="file-path-wrapper">
           <input class="file-path validate" type="text">
@@ -129,5 +138,9 @@
     </div>
   </div>
 
-  <button class="waves-effect waves-light blue darken-3 btn" (click)="addAssignment()">agregar nueva actividad</button>
+  <button
+    [class.disabled]="newAssignmentFile == null || !newAssignment.date || !assignmentFilter"
+    class="waves-effect waves-light blue darken-3 btn" (click)="addAssignment()">
+  agregar nueva actividad
+  </button>
 </div>

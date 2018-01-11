@@ -1,12 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { toast } from 'angular2-materialize';
+import { toastDuration } from './../../../../../environments/environment';
 
 import { FilterPipe } from './../../../../common/pipes/filter-pipe';
 
+import { Assignment } from './../../../../common/interfaces/Assignment';
+
 import { AssignmentsService } from '../../../../services/assignments/assignments.service';
 
-import { Assignment } from './../../../../common/interfaces/Assignment';
 
 @Component({
   selector: 'assignments',
@@ -15,9 +18,10 @@ import { Assignment } from './../../../../common/interfaces/Assignment';
 })
 export class AssignmentsComponent implements OnInit {
   @Input() studentId: string;
+
+  newAssignment: Assignment;
   assignments: Assignment[];
   assignmentFilter: string;
-  newAssignment: Assignment;
   newAssignmentFile: File;
 
   constructor(
@@ -27,13 +31,12 @@ export class AssignmentsComponent implements OnInit {
 
   ngOnInit() {
     this.assignmentFilter = '';
-    this.loadingSpinner.show();
-
     this.newAssignment = {
       name: '',
       date: null
-    }
+    };
 
+    this.loadingSpinner.show();
     this.assignmentsService.getAssignments(this.studentId)
       .subscribe(
         assignments => {
@@ -44,18 +47,32 @@ export class AssignmentsComponent implements OnInit {
       );
   }
 
-  setFile(event) {
-    this.newAssignmentFile = event.srcElement.files[0];
+  setAssignmentFile(fileEvent) {
+    this.newAssignmentFile = fileEvent.srcElement.files[0];
   }
 
   addAssignment() {
-    this.newAssignment.name = this.assignmentFilter;
+    this.loadingSpinner.show();
     
-    this.assignmentsService.addAssignment(this.newAssignment, this.newAssignmentFile);
+    this.newAssignment.name = this.assignmentFilter;
+    this.assignmentsService.addAssignment(this.studentId, this.newAssignment, this.newAssignmentFile)
+      .then(() => {
+        this.assignmentFilter = '';
+        this.newAssignment = {
+          name: '',
+          date: null
+        };
+
+        toast('La actividad se subió correctamente', toastDuration);
+        this.loadingSpinner.hide();
+      },
+      this.handleError
+    );
   }
 
   private handleError(error) {
-    this.loadingSpinner.hide();
+    // this.loadingSpinner.hide();
+
     throw error;
   }
 }
