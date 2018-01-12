@@ -65,7 +65,7 @@
       <div class="row">
         <div class="input-field">
           <i class="material-icons prefix">question_answer</i>
-          <textarea id="textarea1" class="materialize-textarea">{{ assignment.feedback }}</textarea>
+          <textarea id="textarea1" class="materialize-textarea" [value]="assignment.feedback" [(ngModel)]="assignment.feedback">{{ assignment.feedback }}</textarea>
           <label for="textarea1">Retroalimentación</label>
         </div>
       </div>
@@ -80,6 +80,7 @@
               id="grade"
               type="number"
               [value]="assignment.grade"
+              [(ngModel)]="assignment.grade"
               min="0"
               max="100">
             <label for="grade">Calificación</label>
@@ -97,6 +98,8 @@
             assignment_late</i>
             <div
               materialize="material_chip"
+              (chip.add)="addIncident($event.detail, assignment)"
+              (chip.delete)="removeIncident($event.detail, assignment)"
               [materializeParams]="[assignment]"
               id="incidents"
               class="chips">
@@ -105,8 +108,8 @@
         </div>
       </div>
 
-      <button class="waves-effect waves-light blue darken-3 btn">guardar cambios</button>
-      <button class="waves-effect waves-light red darken-3 btn right">eliminar actividad</button>
+      <button class="waves-effect waves-light blue darken-3 btn" (click)="updateAssignment(assignment)">guardar cambios</button>
+      <button class="waves-effect waves-light red darken-3 btn right" (click)="deleteAssignment(assignment)">eliminar actividad</button>
     </div>
   </li>
 </ul>

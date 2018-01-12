@@ -70,6 +70,41 @@ export class AssignmentsComponent implements OnInit {
     );
   }
 
+  addIncident(eventDetail, assignment: Assignment) {
+    assignment.incidents.push(eventDetail.tag);
+  }
+
+  removeIncident(eventDetail, assignment: Assignment) {
+    let incidentIndex = assignment.incidents.indexOf(eventDetail.tag);
+    assignment.incidents.splice(incidentIndex, 1);
+  }
+
+  updateAssignment(assignment) {
+    this.loadingSpinner.show();
+
+    this.assignmentsService.updateAssignment(assignment)
+      .then(
+        () => {
+          this.loadingSpinner.hide();
+          toast('La actividad se actualizó correctamente.', toastDuration);
+        },
+        this.handleError
+      );
+  }
+
+  deleteAssignment(assignment) {
+    this.loadingSpinner.show();
+
+    this.assignmentsService.deleteAssignment(this.studentId, assignment)
+      .then(
+        () => {
+          this.loadingSpinner.hide();
+          toast('La actividad se eliminó correctamente.', toastDuration);
+        },
+        this.handleError
+      );
+  }
+
   private handleError(error) {
     // this.loadingSpinner.hide();
 
