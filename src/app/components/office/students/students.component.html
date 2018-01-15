@@ -1,0 +1,26 @@
+<!-- Students filter -->
+<div class="input-field">
+  <input id="studentFilter" [(ngModel)]="studentFilter" type="text">
+  <label for="studentFilter">Filtrar por nombre</label>
+</div>
+
+<!-- Students body -->
+<ul materialize="collapsible" class="collapsible" data-collapsible="expandable" *ngIf="students && (students | filter: studentFilter).length != 0">
+  <li *ngFor="let student of students | filter: studentFilter">
+    <div class="collapsible-header">
+      <i class="material-icons">person</i>{{ student.name }}
+    </div>
+
+    <div class="collapsible-body">
+      <assignments [studentId]="student.id"></assignments>
+    </div>
+  </li> 
+</ul>
+
+<a
+  *ngIf="students && (students | filter: studentFilter).length == 0"
+  [class.disabled]="studentFilter.length == 0"
+  (click)="addStudent()"
+  class="waves-effect waves-light blue darken-3 btn">
+agregar nuevo alumno
+</a>

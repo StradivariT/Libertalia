@@ -71,6 +71,17 @@ export class ContextService {
       .then(null, this.handlePromiseError);
   }
 
+  updateContext(updatedContext): Promise<any> {
+    let courseDoc = this.firestore.doc(this.subContextEndpoints[1].path + '/' + updatedContext.courseId);
+    let groupDoc = this.firestore.doc(this.subContextEndpoints[2].path + '/' + updatedContext.groupId);
+
+    return courseDoc.update({name: updatedContext.courseName})
+      .then(
+        () => groupDoc.update({name: updatedContext.groupName}).then(null, this.handlePromiseError)
+        ,this.handlePromiseError
+      );
+  }
+
   private handleSnapshots(changes): SubContext[] {
     return changes.map(subContext => {
       const data = subContext.payload.doc.data() as SubContext;

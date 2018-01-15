@@ -1,6 +1,9 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { toast } from 'angular2-materialize';
+import { toastDuration } from './../../../environments/environment';
 
 import { ContextService } from './../../services/context/context.service';
 
@@ -18,15 +21,22 @@ export class ContextComponent implements OnInit {
   mainContexts:         MainContext[];
   subContexts:          SubContext[];
   subContextSelected:   SubContext[];
-  contextFilter:        string; 
+  contextFilter:        string;
+  preventiveMessages:   string[];
 
   constructor(
     private contextService: ContextService,
-    private loadingSpinner: Ng4LoadingSpinnerService) {}
+    private loadingSpinner: Ng4LoadingSpinnerService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.subContextSelected = [];
     this.contextFilter = '';
+    this.preventiveMessages = [
+      'Selecciona un plan educativo primero.',
+      'Selecciona un curso primero.'
+    ];
 
     this.loadingSpinner.show();
     this.contextService.getMainContexts()
@@ -70,9 +80,24 @@ export class ContextComponent implements OnInit {
     this.loadingSpinner.show();
 
     this.contextService.addSubcontext(mainContext, this.contextFilter, this.subContextSelected)
-      .then(() => this.loadingSpinner.hide(), this.handleError);
+      .then(
+        () => { 
+          this.loadingSpinner.hide();
+          toast("Agregado exitosamente", toastDuration);
+        }, this.handleError
+      );
 
     this.contextFilter = ''; 
+  }
+
+  enterOffice() {
+    this.router.navigate([
+      'office/students',
+      this.subContextSelected[1].name,
+      this.subContextSelected[1].id,
+      this.subContextSelected[2].name,
+      this.subContextSelected[2].id
+    ]);
   }
 
   private handleError(error) {

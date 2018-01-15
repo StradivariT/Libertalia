@@ -1,0 +1,148 @@
+<!-- Assignment filter -->
+<div class="input-field">
+  <input id="assignmentFilter" type="text" [(ngModel)]="assignmentFilter">
+  <label for="assignmentFilter">Nombre de la actividad</label>
+</div>
+
+<!-- Assignmnets body -->
+<ul materialize="collapsible" *ngIf="assignments && (assignments | filter: assignmentFilter).length != 0" class="collapsible" data-collapsible="expandable">
+  <li *ngFor="let assignment of assignments | filter: assignmentFilter">
+    <div class="collapsible-header">
+      <i class="material-icons">assignment</i>{{ assignment.name }}
+    </div>
+
+    <div class="collapsible-body">
+      <!-- File name -->
+      <div class="row">
+        <div class="input-field">
+          <i class="material-icons prefix">description</i>
+          <input id="assignmentName" type="text" [(ngModel)]="assignment.name" [value]="assignment.name">
+          <label for="assignmentName">Nombre de la actividad</label>
+        </div>
+      </div>
+      
+      <!-- File turned in and date -->
+      <div class="row">
+          <!-- File turned in -->
+        <div class="col s6">
+          <div class="input-field">
+            <a [href]="assignment.file.fileURL" target="_blank" class="material-icons prefix file-download">
+              <span
+              materialize="tooltip"
+              class=" tooltiped"
+              data-position="top"
+              data-delay="30"
+              data-tooltip="Da click para descargar el archivo">attachment</span>
+            </a>
+            
+            <input
+              disabled
+              id="fileSubmited"
+              type="text"
+              [value]="assignment.file.fileName">
+            <label for="fileSubmited">Archivo entregado</label>
+          </div>
+        </div>
+
+        <!-- Date -->
+        <div class="col s6">
+          <div class="input-field">
+            <i class="material-icons prefix">date_range</i>
+            <input
+              materialize="pickadate"
+              class="datepicker"
+              id="assignmentDate"
+              type="text"
+              [materializeParams]="[{format: 'dd/mm/yyyy'}]"
+              [(ngModel)]="assignment.date"
+              placeholder="Fecha de entrega">
+              <label for="assignmentDate">Fecha que se entregó la actividad</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="row">
+        <div class="input-field">
+          <i class="material-icons prefix">question_answer</i>
+          <textarea id="textarea1" class="materialize-textarea" [value]="assignment.feedback" [(ngModel)]="assignment.feedback">{{ assignment.feedback }}</textarea>
+          <label for="textarea1">Retroalimentación</label>
+        </div>
+      </div>
+
+      <!-- Grade and incidents -->
+      <div class="row">
+        <!-- Grade -->
+        <div class="col s6">
+          <div class="input-field">
+            <i class="material-icons prefix">assignment_turned_in</i>
+            <input
+              id="grade"
+              type="number"
+              [value]="assignment.grade"
+              [(ngModel)]="assignment.grade"
+              min="0"
+              max="100">
+            <label for="grade">Calificación</label>
+          </div>
+        </div>
+        <!-- Incidents -->
+        <div class="col s6">
+          <div class="input-field">
+            <i class="material-icons prefix">assignment_late</i>
+            <textarea id="textarea2" class="materialize-textarea" [value]="assignment.incidents" [(ngModel)]="assignment.incidents">{{ assignment.incidents }}</textarea>
+            <label for="textarea2">Incidencias</label>
+          </div>
+        </div>
+      </div>
+
+      <button class="waves-effect waves-light blue darken-3 btn" (click)="updateAssignment(assignment)">guardar cambios</button>
+      <button class="waves-effect waves-light red darken-3 btn right" (click)="confirmDelete()">eliminar actividad</button>
+    </div>
+
+    <div id="modal2" class="modal" materialize="modal" [materializeActions]="modalActions">
+      <div class="modal-content">
+        <h5>Estás segura de querer eliminar la actividad: {{ assignment.name }}?</h5>
+        <p>Esto no se puede revertir.</p>
+      </div>
+      <div class="modal-footer">
+        <a class="modal-action modal-close waves-effect waves-light red darken-3 btn">cancelar</a>
+        <a class="modal-action modal-close waves-effect waves-light blue darken-3 btn" (click)="deleteAssignment(assignment)">eliminar</a>
+      </div>
+    </div>
+  </li>
+</ul>
+
+<div *ngIf="assignments && (assignments | filter: assignmentFilter).length == 0" class="new-activity-form">
+  <div class="row">
+    <div class="col s6">
+      <div class="file-field input-field">
+        <div class="waves-effect waves-light orange darken-3 btn">
+          archivo de la actividad
+          <input type="file" (change)="setAssignmentFile($event)">
+        </div>
+        <div class="file-path-wrapper">
+          <input class="file-path validate" type="text">
+        </div>
+      </div>
+    </div>
+
+    <div class="col s6">
+      <div class="input-field">
+        <i class="material-icons prefix">date_range</i>
+        <input
+          materialize="pickadate"
+          class="datepicker"
+          type="text"
+          [(ngModel)]="newAssignment.date"
+          placeholder="Fecha de entrega">
+      </div>
+    </div>
+  </div>
+
+  <button
+    [class.disabled]="newAssignmentFile == null || !newAssignment.date || !assignmentFilter"
+    class="waves-effect waves-light blue darken-3 btn" (click)="addAssignment()">
+  agregar nueva actividad
+  </button>
+</div>

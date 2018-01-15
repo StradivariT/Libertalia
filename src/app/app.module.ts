@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
+import 'firebase/storage';
 
 import { environment } from './../environments/environment';
 import { routes } from './app.routes';
@@ -14,29 +15,34 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-import { MainTabsComponent } from './main-tabs/main-tabs.component';
 import { NavbarComponent } from './components/auth-wrapper/navbar/navbar.component';
 import { AuthWrapperComponent } from './components/auth-wrapper/auth-wrapper.component';
 import { ContextComponent } from './components/context/context.component';
+import { OfficeComponent } from './components/office/office.component';
+import { StudentsComponent } from './components/office/students/students.component';
+import { AssignmentsComponent } from './components/office/students/assignments/assignments.component';
 
 import { AuthService } from './services/auth/auth.service';
 import { AuthGuard } from './services/auth/auth-guard.service';
 import { PreventLoginAccess } from './services/auth/prevent-login-access.service';
 import { ContextService } from './services/context/context.service';
+import { StudentsService } from './services/students/students.service';
+import { AssignmentsService } from './services/assignments/assignments.service';
 
 import { AppErrorHandler } from './common/errors/app-error-handler';
 import { FilterPipe } from './common/pipes/filter-pipe';
-
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    MainTabsComponent,
     NavbarComponent,
     AuthWrapperComponent,
     ContextComponent,
-    FilterPipe
+    FilterPipe,
+    OfficeComponent,
+    StudentsComponent,
+    AssignmentsComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +60,9 @@ import { FilterPipe } from './common/pipes/filter-pipe';
     AuthService,
     AuthGuard,
     PreventLoginAccess,
-    ContextService
+    ContextService,
+    StudentsService,
+    AssignmentsService
   ],
   bootstrap: [AppComponent]
 })
