@@ -1,11 +1,11 @@
 export const environment = {
   production: true,
   firebaseConfig: {
-    apiKey: "AIzaSyDsqp7in6qWRrSNurcKtSVygcwgj_8soD4",
-    authDomain: "libertalia-613d4.firebaseapp.com",
-    databaseURL: "https://libertalia-613d4.firebaseio.com",
-    projectId: "libertalia-613d4",
-    storageBucket: "libertalia-613d4.appspot.com"
+    apiKey: "AIzaSyC_9EFqs5wIjMxg9O8tcrZ6MfGI3TounnU",
+    authDomain: "libertalia-1d739.firebaseapp.com",
+    databaseURL: "https://libertalia-1d739.firebaseio.com",
+    projectId: "libertalia-1d739",
+    storageBucket: "libertalia-1d739.appspot.com",
   }
 };
 

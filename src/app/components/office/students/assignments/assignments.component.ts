@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter } from '@angular/core';
 
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { toast } from 'angular2-materialize';
@@ -10,6 +10,7 @@ import { Assignment } from './../../../../common/interfaces/Assignment';
 
 import { AssignmentsService } from '../../../../services/assignments/assignments.service';
 
+import {MaterializeDirective,MaterializeAction} from "angular2-materialize";
 
 @Component({
   selector: 'assignments',
@@ -23,6 +24,7 @@ export class AssignmentsComponent implements OnInit {
   assignments: Assignment[];
   assignmentFilter: string;
   newAssignmentFile: File;
+  modalActions: EventEmitter<string|MaterializeAction>;
 
   constructor(
     private assignmentsService: AssignmentsService,
@@ -35,6 +37,8 @@ export class AssignmentsComponent implements OnInit {
       name: '',
       date: null
     };
+
+    this.modalActions = new EventEmitter<string|MaterializeAction>()
 
     this.loadingSpinner.show();
     this.assignmentsService.getAssignments(this.studentId)
@@ -70,15 +74,6 @@ export class AssignmentsComponent implements OnInit {
     );
   }
 
-  addIncident(eventDetail, assignment: Assignment) {
-    assignment.incidents.push(eventDetail.tag);
-  }
-
-  removeIncident(eventDetail, assignment: Assignment) {
-    let incidentIndex = assignment.incidents.indexOf(eventDetail.tag);
-    assignment.incidents.splice(incidentIndex, 1);
-  }
-
   updateAssignment(assignment) {
     this.loadingSpinner.show();
 
@@ -92,8 +87,13 @@ export class AssignmentsComponent implements OnInit {
       );
   }
 
+  confirmDelete() {
+    this.modalActions.emit({action:"modal",params:['open']});
+  }
+
   deleteAssignment(assignment) {
     this.loadingSpinner.show();
+    this.modalActions.emit({action:"modal",params:['close']});
 
     this.assignmentsService.deleteAssignment(this.studentId, assignment)
       .then(

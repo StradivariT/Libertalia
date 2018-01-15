@@ -117,13 +117,9 @@ export class AssignmentsService {
       let assignmentData = assignment.payload.doc.data() as Assignment;
       
       assignmentData.id = assignment.payload.doc.id;
-      assignmentData.data = [];
-      assignmentData.placeholder = 'Incidencias';
 
-      if(assignmentData.incidents)
-        assignmentData.incidents.forEach(incident => assignmentData.data.push({ tag: incident }));
-      else
-        assignmentData.incidents = [];
+      if(!assignment.incidents)
+        assignment.incidents = '';
 
       if(!assignmentData.feedback)
         assignmentData.feedback = '';

@@ -5,7 +5,7 @@
 </div>
 
 <!-- Students body -->
-<ul materialize="collapsible" class="collapsible" data-collapsible="expandable">
+<ul materialize="collapsible" class="collapsible" data-collapsible="expandable" *ngIf="students && (students | filter: studentFilter).length != 0">
   <li *ngFor="let student of students | filter: studentFilter">
     <div class="collapsible-header">
       <i class="material-icons">person</i>{{ student.name }}
