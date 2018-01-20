@@ -21,6 +21,7 @@ export class StudentsComponent implements OnInit {
   students: Student[];
   group: string;
   studentFilter: string;
+  studentNum: number;
 
   constructor(
     private studentsService: StudentsService,
@@ -46,7 +47,7 @@ export class StudentsComponent implements OnInit {
   addStudent() {
     this.loadingSpinner.show();
     
-    this.studentsService.addStudent(this.studentFilter)
+    this.studentsService.addStudent(this.studentFilter, this.studentNum)
       .then(
         () => {
           this.loadingSpinner.hide();
@@ -55,10 +56,24 @@ export class StudentsComponent implements OnInit {
       );
   
     this.studentFilter = '';
+    this.studentNum = null;
+  }
+
+  updateStudent(student) {
+    this.loadingSpinner.show();
+
+    this.studentsService.updateStudent(student)
+      .then(
+        () => {
+          this.loadingSpinner.hide();
+          toast('El alumno se actualizó correctamente.', toastDuration);
+        },
+        this.handleError
+      );
   }
 
   private handleError(error) {
-    this.loadingSpinner.hide();
+    // this.loadingSpinner.hide();
     throw error;
   }
 }

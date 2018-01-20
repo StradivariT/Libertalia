@@ -1,17 +1,48 @@
 <!-- Students filter -->
-<div class="input-field">
-  <input id="studentFilter" [(ngModel)]="studentFilter" type="text">
-  <label for="studentFilter">Filtrar por nombre</label>
+<div class="row">
+  <div class="col s6">
+    <div class="input-field">
+      <input id="studentFilter" [(ngModel)]="studentFilter" type="text">
+      <label for="studentFilter">Filtrar por nombre</label>
+    </div>
+  </div>
+  <div class="col s6">
+    <div class="input-field">
+      <input id="studentNum" [(ngModel)]="studentNum" type="number">
+      <label for="studentNum">Número de alumno</label>
+    </div>
+  </div>
 </div>
+
 
 <!-- Students body -->
 <ul materialize="collapsible" class="collapsible" data-collapsible="expandable" *ngIf="students && (students | filter: studentFilter).length != 0">
   <li *ngFor="let student of students | filter: studentFilter">
     <div class="collapsible-header">
-      <i class="material-icons">person</i>{{ student.name }}
+      <i class="material-icons">person</i>{{ student.number }} - {{ student.name }}
     </div>
 
     <div class="collapsible-body">
+        <div class="row">
+          <div class="col s4">
+            <div class="input-field">
+              <input id="studentFilter" [(ngModel)]="student.name" type="text">
+              <label for="studentFilter">Nombre del alumno</label>
+            </div>
+          </div>
+          <div class="col s4">
+            <div class="input-field">
+              <input id="studentNum" [(ngModel)]="student.number" type="number">
+              <label for="studentNum">Número de alumno</label>
+            </div>
+          </div>
+          <div class="col s4">
+            <div class="input-field">
+              <a (click)="updateStudent(student)" class="waves-effect waves-light blue darken-3 btn">actualizar alumno</a>
+            </div>
+          </div>
+        </div>
+
       <assignments [studentId]="student.id"></assignments>
     </div>
   </li> 
@@ -19,7 +50,7 @@
 
 <a
   *ngIf="students && (students | filter: studentFilter).length == 0"
-  [class.disabled]="studentFilter.length == 0"
+  [class.disabled]="studentFilter.length == 0 && studentNum == 0"
   (click)="addStudent()"
   class="waves-effect waves-light blue darken-3 btn">
 agregar nuevo alumno

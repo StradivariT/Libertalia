@@ -17,7 +17,7 @@ export class StudentsService {
   getStudents(groupId): Observable<any> {
     //Gotta find a way to move this two lines to on init
     this.groupDoc = this.firestore.doc('groups/' + groupId);
-    this.studentsCollection = this.firestore.collection('students', ref => ref.where('groupDoc', '==', this.groupDoc.ref));
+    this.studentsCollection = this.firestore.collection('students', ref => ref.where('groupDoc', '==', this.groupDoc.ref).orderBy('number', 'asc'));
 
     return this.studentsCollection
       .snapshotChanges()
@@ -25,13 +25,21 @@ export class StudentsService {
       .catch(this.handleObservableError);
   }
 
-  addStudent(newStudentName): Promise<any> {
+  addStudent(newStudentName, newStudentNum): Promise<any> {
     let newStudent = {
       name: newStudentName,
+      number: newStudentNum,
       groupDoc: this.groupDoc.ref
     }
 
     return this.studentsCollection.add(newStudent)
+      .then(null, this.handlePromiseError);
+  }
+
+  updateStudent(student): Promise<any> {
+    let studentDoc = this.firestore.doc('students/' + student.id);
+
+    return studentDoc.update(student)
       .then(null, this.handlePromiseError);
   }
 
@@ -44,6 +52,8 @@ export class StudentsService {
   }
 
   private handleObservableError(error): Observable<AppError> {
+    console.log(error);
+
     return Observable.throw(new AppError());
   }
 
