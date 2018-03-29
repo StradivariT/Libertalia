@@ -1,0 +1,79 @@
+<div class="content-container">
+  <div class="row">
+    <div class="col-xs-5">
+      <h4>Selecciona un {{ context.name | lowercase }}...</h4>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div
+        class="select"
+        [class.disabled]="contextResources.length < 1">
+        <select
+          [compareWith]="compareResources"
+          [disabled]="contextResources.length < 1"
+          (change)="emitSelectedResource(resourceSelected)"
+          [(ngModel)]="resourceSelected">
+          <option
+            *ngFor="let contextResource of contextResources"
+            [ngValue]="contextResource">
+          {{ contextResource.name }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <br>
+  
+  <div class="row">
+    <div class="col-xs-4">
+      <h4>...o agrega uno nuevo.</h4>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <input
+        type="text"
+        placeholder="Nombre del nuevo {{ context.name | lowercase }}"
+        [disabled]="isLoading"
+        [(ngModel)]="newResource">
+    </div>
+  </div>
+
+  <br>
+
+  <div class="row flex-items-xs-middle">
+    <div class="col-xs-2">
+      <button
+        class="btn btn-primary"
+        [disabled]="newResource == '' || newResource == null || isLoading"
+        (click)="addResource()">
+      agregar
+      </button>
+    </div>
+
+    <div class="col-xs-10">
+      <spinner *ngIf="isLoading"></spinner>
+      <clr-alert [clrAlertType]="'alert-success'" [(clrAlertClosed)]="!resourceAdded">
+        <div clr-alert-item class="alert-item">
+          <span class="alert-text">
+            El nuevo {{ context.name | lowercase }} se agregó correctamente, puedes seleccionarlo en la lista.
+          </span>
+        </div>
+      </clr-alert>
+      <clr-alert [clrAlertType]="'alert-danger'" [(clrAlertClosed)]="!resourceError">
+        <div clr-alert-item class="alert-item">
+          <span class="alert-text">
+            Ya existe un {{ context.name | lowercase }} con ese nombre. Ingresa uno diferente.
+          </span>
+        </div>
+      </clr-alert>
+    </div>
+  </div>
+</div>

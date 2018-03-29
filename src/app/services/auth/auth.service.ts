@@ -1,50 +1,41 @@
 import { Injectable } from '@angular/core';
-import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { Http, Response } from '@angular/http';
+
+import { tokenNotExpired } from 'angular2-jwt';
+
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
 
-import { Router } from '@angular/router';
-import { AngularFireAuth } from 'angularfire2/auth';
-
-import { InvalidCredentialsError } from './../../common/errors/invalid-credentials-error';
 import { AppError } from './../../common/errors/app-error';
+import { InvalidCredentialsError } from './../../common/errors/invalid-credentials-error';
 
 @Injectable()
-export class AuthService implements OnInit {
-  authState: any = null;
+export class AuthService {
+  private url = 'http://localhost:8000/api/';
 
-  constructor(
-    private firebaseAuth: AngularFireAuth,
-    private router: Router) {}
+  constructor(private http: Http) {}
 
-  ngOnInit(): void { 
-    this.firebaseAuth.authState
-      .subscribe(authentication => {
-        this.authState = authentication;
-      });
-  }
+  login(email: string, password: string): Observable<Response> {
+    return this.http.post(this.url + 'login', {email: email, password: password})
+      .map((response: Response) => {
+        const token = response.json().token;
 
-  isAuthenticated(): boolean { return localStorage.getItem('userInfo') !== null; }
-
-  login(email, password): Promise<any> {
-    return this.firebaseAuth.auth.signInWithEmailAndPassword(email, password)
-      .then(userAuthInfo => {
-        localStorage.setItem('userInfo', JSON.stringify(userAuthInfo));
+        localStorage.setItem('token', token);
+        return null;
       })
       .catch(this.handleError);
   }
 
-  logout(): Promise<any> {
-    return this.firebaseAuth.auth.signOut()
-      .then(() => {
-        localStorage.removeItem('userInfo');
-      })
-      .catch(this.handleError);
-  }
+  logout(): void { localStorage.removeItem('token'); }
 
-  private handleError(error): Promise<AppError> {
-    if(error.code === "auth/user-not-found" || error.code === "auth/wrong-password")
-      return Promise.reject(new InvalidCredentialsError());
+  isAuthenticated(): boolean { return tokenNotExpired(); }
 
-    return Promise.reject(new AppError());
+  private handleError(error: Response): Observable<Response> {
+    if(error.status == 401)
+      return Observable.throw(new InvalidCredentialsError());
+
+    return Observable.throw(new AppError(error));
   }
 }

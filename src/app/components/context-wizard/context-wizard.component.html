@@ -1,0 +1,32 @@
+<clr-wizard
+  #contextWizard
+  [clrWizardClosable]="false"
+  [clrWizardPreventDefaultNext]="true"
+  [clrWizardDisableStepnav]="true"
+  (clrWizardOnNext)="nextStep()"
+  (clrWizardOnFinish)="loadOffice()"
+  [(clrWizardOpen)]="isWizardOpen">
+  <clr-wizard-title>Contexto</clr-wizard-title>
+
+  <clr-wizard-button [type]="'previous'">Regresar</clr-wizard-button>
+  <clr-wizard-button [type]="'next'">Siguiente</clr-wizard-button>
+  <clr-wizard-button [type]="'finish'">Confirmar</clr-wizard-button>
+
+  <div *ngIf="isLoading" class="row flex-items-xs-center">
+    <spinner></spinner>
+  </div>
+
+  <clr-wizard-page
+    *ngFor="let context of contexts; index as index;"
+    [clrWizardPageNextDisabled]="emptyResources"
+    (clrWizardPagePrevious)="emptyResources = false">
+    <ng-template clrPageTitle>{{ context.name }}</ng-template>
+    <context-wizard-step
+      #contextWizardStep
+      [currentStep]="index"
+      [context]="context"
+      (emptyResources)="emptyResources = $event"
+      (selectedResource)="appendResource($event)">
+    </context-wizard-step>
+  </clr-wizard-page>
+</clr-wizard>

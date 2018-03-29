@@ -1,0 +1,59 @@
+<div class="main-container">
+  <navbar (courseInfoUpdated)="displayAlert($event)"></navbar>
+
+  <div class="content-container">
+    <div class="content-area">
+      <div class="row" *ngIf="isAlertOpen">
+        <div class="col-xs-12">
+          <clr-alert
+            [clrAlertType]="alertType"
+            (clrAlertClosedChange)="closeAlert()">
+            <div clr-alert-item class="alert-item">
+              <span class="alert-text">{{ alertMessage }}</span>
+            </div>
+          </clr-alert>
+        </div>
+      </div>
+
+      <div class="row flex-items-xs-center">
+        <h3>Archivos del grupo</h3>
+      </div>
+
+      <br>
+
+      <div class="row flex-items-xs-center" *ngIf="isLoading">
+        <spinner></spinner>
+      </div>
+
+      <div class="row flex-items-xs-center">
+        <div class="col-xs-4">
+          <group-files-card
+            [title]="'Lista de participantes'"
+            [type]="'participants'"
+            [groupId]="groupId"
+            [groupFileName]="groupFileNames.participantsFileName"
+            (groupFileAdded)="displayAlert($event)">
+          </group-files-card>
+        </div>
+        <div class="col-xs-4">
+          <group-files-card
+            [title]="'Compendio de incidencias'"
+            [type]="'incidents'"
+            [groupId]="groupId"
+            [groupFileName]="groupFileNames.incidentsFileName"
+            (groupFileAdded)="displayAlert($event)">
+          </group-files-card>
+        </div>
+        <div class="col-xs-4">
+          <group-files-card
+            [title]="'Lista de evaluaciones finales'"
+            [type]="'evaluations'"
+            [groupId]="groupId"
+            [groupFileName]="groupFileNames.evaluationsFileName"
+            (groupFileAdded)="displayAlert($event)">
+          </group-files-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

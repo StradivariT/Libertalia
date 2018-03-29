@@ -1,0 +1,109 @@
+<div class="row flex-items-xs-center" *ngIf="isLoadingActivity">
+  <spinner></spinner>
+</div>
+
+<div *ngIf="!isLoadingActivity">
+  <h3>
+    {{ activity.name }} &nbsp;
+    <clr-icon 
+      id="edit-activity-icon"
+      shape="edit"
+      (click)="isEditingActivity = !isEditingActivity">
+    </clr-icon>
+  </h3>
+  
+  <div class="row" *ngIf="isEditingActivity">
+    <div class="col-xs-12">
+      <h4>Nombre de la actividad</h4>
+      <input
+        id="activity-name-input"
+        type="text"
+        [disabled]="isUpdatingActivity"
+        [(ngModel)]="activityEditable.name">
+    </div>
+  </div>  
+  
+  <div class="row">
+    <div class="col-xs-4">
+      <h4>Fecha entregada</h4>
+  
+      <span *ngIf="!isEditingActivity">{{ activity.turnedInDate }}</span>
+      <input
+      type="date"
+      *ngIf="isEditingActivity"
+      [disabled]="isUpdatingActivity"
+      [(ngModel)]="activityEditable.turnedInDate">
+    </div>
+  
+    <div class="col-xs-4">
+      <h4>Archivo entregado</h4>
+  
+      <span id="activity-file" (click)="downloadFile()">
+        <clr-icon shape="file"></clr-icon>&nbsp;<span>{{ activity.fileName }}</span>
+      </span>
+    </div>
+  
+    <div class="col-xs-4">
+        <h4>Calificación</h4>
+  
+        <span *ngIf="!isEditingActivity">{{ activity.grade || 'No hay calificación registrada.' }}</span>
+        <input
+          type="text"
+          *ngIf="isEditingActivity"
+          [disabled]="isUpdatingActivity"
+          [(ngModel)]="activityEditable.grade">
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>Retroalimentación</h4>
+  
+      <span class="feedback-incidents" *ngIf="!isEditingActivity">{{ activity.feedback || 'No hay retroalimentación registrada.' }}</span>
+    
+      <textarea
+        rows="3"
+        *ngIf="isEditingActivity"
+        [disabled]="isUpdatingActivity"
+        [(ngModel)]="activityEditable.feedback">
+      </textarea>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>Incidencias</h4>
+  
+      <span class="feedback-incidents" *ngIf="!isEditingActivity">{{ activity.incidents || 'No hay incidencias registradas.' }}</span>
+    
+      <textarea
+        rows="3"
+        *ngIf="isEditingActivity"
+        [disabled]="isUpdatingActivity"
+        [(ngModel)]="activityEditable.incidents">
+      </textarea>
+    </div>
+  </div>
+  
+  <br>
+  
+  <div class="row">
+    <div class="col-xs-4">
+      <button
+        class="btn btn-outline"
+        *ngIf="isEditingActivity"
+        [disabled]="isUpdatingActivity"
+        (click)="closeActivityEditable()">
+      cancelar</button>
+    
+      <button
+        class="btn btn-primary"
+        *ngIf="isEditingActivity"
+        [disabled]="isActivityEditableNotValid() || isUpdatingActivity"
+        (click)="updateActivity()">
+      guardar</button>
+
+      <spinner *ngIf="isUpdatingActivity"></spinner>
+    </div>
+  </div>
+</div>

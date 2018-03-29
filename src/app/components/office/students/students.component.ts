@@ -1,79 +1,97 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-
-import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { toast } from 'angular2-materialize';
-import { toastDuration } from './../../../../environments/environment';
-
-import { FilterPipe } from './../../../common/pipes/filter-pipe';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 import { StudentsService } from './../../../services/students/students.service';
 
-import { Student } from './../../../common/interfaces/Student';
-import { CurrentContext } from './../../../common/interfaces/CurrentContext';
+import { Alert } from './../../../common/interfaces/alert';
+import { Student } from './../../../common/interfaces/student';
+
+import { AppError } from './../../../common/errors/app-error';
+import { NotFoundError } from './../../../common/errors/not-found-error';
+import { BadRequestError } from './../../../common/errors/bad-request-error';
 
 @Component({
-  selector: 'app-students',
+  selector: 'students',
   templateUrl: './students.component.html',
   styleUrls: ['./students.component.css']
 })
 export class StudentsComponent implements OnInit {
-  students: Student[];
-  group: string;
-  studentFilter: string;
-  studentNum: number;
+  @Output('studentAdded')    studentAdded = new EventEmitter<Alert>();
+  @Output('noStudents')      noStudents = new EventEmitter<Boolean>();
+  @Output('studentSelected') studentSelected = new EventEmitter<Student>();
+
+  groupId:               number;
+  studentIDSelected:     number;
+  newStudentNumber:      number;
+  isLoading:             boolean;
+  isAddStudentModalOpen: boolean;
+  newStudentName:        string;
+  students:              Student[];
 
   constructor(
-    private studentsService: StudentsService,
-    private route: ActivatedRoute,
-    private loadingSpinner: Ng4LoadingSpinnerService
+    private route:           ActivatedRoute,
+    private router:          Router,
+    private studentsService: StudentsService
   ) {}
 
   ngOnInit() {
-    this.group = this.route.snapshot.paramMap.get('groupId');
-    this.studentFilter = '';
+    this.groupId = this.route.snapshot.params['groupId'];
+    this.students = [];
 
-    this.loadingSpinner.show();
-    this.studentsService.getStudents(this.group)
+    this.studentsService.getAll(this.groupId)
       .subscribe(
-        students => {
-          this.students = students;
-          this.loadingSpinner.hide();
+        response => {
+          this.students = response.json().students as Student[];
+          this.noStudents.emit(false);
+          this.selectStudent(this.students[0]);
         },
-        this.handleError 
+        (error: AppError) => {
+          if(error instanceof NotFoundError)
+            return this.noStudents.emit(true);
+
+          if(error instanceof BadRequestError)
+            return this.router.navigate(['/context']);
+
+          throw error;
+        }
       );
   }
 
-  addStudent() {
-    this.loadingSpinner.show();
-    
-    this.studentsService.addStudent(this.studentFilter, this.studentNum)
-      .then(
-        () => {
-          this.loadingSpinner.hide();
-          toast('Alumno agregado exitosamente.', toastDuration);
-        }, this.handleError
-      );
-  
-    this.studentFilter = '';
-    this.studentNum = null;
-  }
+  addStudent(): void {
+    this.isLoading = true;
 
-  updateStudent(student) {
-    this.loadingSpinner.show();
+    this.studentsService.create({newStudentName: this.newStudentName, newStudentNumber: this.newStudentNumber}, this.groupId)
+      .finally(() => this.isLoading = false)
+      .subscribe(
+        response => {
+          this.students.push(response.json().newStudent as Student);
 
-    this.studentsService.updateStudent(student)
-      .then(
-        () => {
-          this.loadingSpinner.hide();
-          toast('El alumno se actualizó correctamente.', toastDuration);
+          this.closeAddStudentModal();
+
+          this.studentAdded.emit({
+            type: 'alert-success',
+            message: 'El alumno fue agregado correctamente.'
+          });
+
+          if(this.students.length == 1) {
+            this.noStudents.emit(false);
+            this.selectStudent(this.students[0]);
+          }
         },
-        this.handleError
+        (error: AppError) => {
+          throw error;
+        }
       );
   }
 
-  private handleError(error) {
-    // this.loadingSpinner.hide();
-    throw error;
+  closeAddStudentModal(): void {
+    this.newStudentName = "";
+    this.newStudentNumber = null;
+    this.isAddStudentModalOpen = false;
+  }
+
+  selectStudent(student: Student): void {
+    this.studentIDSelected = student.id;
+    this.studentSelected.emit(student);
   }
 }

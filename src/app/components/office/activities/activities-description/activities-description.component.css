@@ -1,0 +1,11 @@
+#activity-file:hover, #edit-activity-icon:hover {
+    cursor: pointer;
+}
+
+#activity-name-input {
+    width: 100%
+}
+
+.feedback-incidents {
+    white-space: pre;
+}

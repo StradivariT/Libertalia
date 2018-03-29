@@ -1,3 +1,3 @@
-import { AppError } from "./app-error";
+import { AppError } from './app-error';
 
-export class InvalidCredentialsError extends AppError{}
+export class InvalidCredentialsError extends AppError {}

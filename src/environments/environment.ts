@@ -4,14 +4,8 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false,
-  firebaseConfig: {
-    apiKey: "AIzaSyDsqp7in6qWRrSNurcKtSVygcwgj_8soD4",
-    authDomain: "libertalia-613d4.firebaseapp.com",
-    databaseURL: "https://libertalia-613d4.firebaseio.com",
-    projectId: "libertalia-613d4",
-    storageBucket: "libertalia-613d4.appspot.com"
-  }
+  production: false
 };
 
-export const toastDuration = 3000;
+
+export const unexpectedErrorMessage = 'Ocurrió un error con el servidor, intenta de nuevo.';

@@ -1,0 +1,20 @@
+<activities-header
+    #activitiesHeader
+    [studentSelected]="studentSelected"
+    (noActivities)="noActivities = $event"
+    (alertEmitter)="displayAlert($event)"
+    (activitySelected)="activitySelected = $event">
+</activities-header>
+
+<br>
+
+<div class="row flex-items-xs-center" *ngIf="noActivities">
+    <h3>No hay actividades registradas.</h3>
+</div>
+
+<activities-description
+    #activitiesDescription
+    *ngIf="!noActivities"
+    [activitySelected]="activitySelected"
+    (activityUpdated)="displayAlert($event)">
+</activities-description>

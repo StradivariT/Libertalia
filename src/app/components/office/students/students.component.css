@@ -1,3 +1,7 @@
-.tooltiped:hover {
-    cursor: pointer;
-} 
+.modal-spinner {
+    margin-right: 29em;
+}
+
+.modal-footer {
+    margin-top: 1em;
+}

@@ -1,0 +1,7 @@
+.file-button {
+    margin-top: 0.7em;
+}
+
+.group-file-name:hover {
+    cursor: pointer;
+}

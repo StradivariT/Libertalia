@@ -1,47 +1,39 @@
-import { OfficeComponent } from './components/office/office.component';
 import { Routes } from '@angular/router';
 
 import { LoginComponent } from './components/login/login.component';
-import { AuthWrapperComponent } from './components/auth-wrapper/auth-wrapper.component';
-import { ContextComponent } from './components/context/context.component';
-import { StudentsComponent } from './components/office/students/students.component';
+import { OfficeComponent } from 'app/components/office/office.component';
+import { GroupFilesComponent } from './components/group-files/group-files.component';
+import { ContextEditComponent } from './components/context-edit/context-edit.component';
+import { ContextWizardComponent } from './components/context-wizard/context-wizard.component';
 
 import { AuthGuard } from './services/auth/auth-guard.service';
-import { PreventLoginAccess } from './services/auth/prevent-login-access.service';
+import { SessionGuard } from 'app/services/auth/session-guard.service';
 
 export const routes: Routes = [
     { 
         path: '', 
         component: LoginComponent,
-        canActivate: [PreventLoginAccess]
+        canActivate: [SessionGuard]
     },
     { 
         path: 'context', 
-        component: AuthWrapperComponent,
-        children: [
-            {
-                path: '',
-                component: ContextComponent
-            }
-        ],
+        component: ContextWizardComponent,
         canActivate: [AuthGuard]
     },
     {
-        path: 'office/students/:courseName/:courseId/:groupName/:groupId',
-        component: AuthWrapperComponent,
-        children: [
-            {
-                path: '',
-                component: OfficeComponent,
-                children: [
-                    {
-                        path: '',
-                        component: StudentsComponent
-                    }
-                ]
-            }
-        ],
-        canActivate: [AuthGuard]        
+        path: 'groupFiles/:educPlanId/:educPlanName/:courseId/:courseName/:groupId/:groupName',
+        component: GroupFilesComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'contextEdit/:educPlanId/:educPlanName/:courseId/:courseName/:groupId/:groupName',
+        component: ContextEditComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'office/:educPlanId/:educPlanName/:courseId/:courseName/:groupId/:groupName',
+        component: OfficeComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: '**',

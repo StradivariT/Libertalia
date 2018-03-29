@@ -1,14 +1,13 @@
-import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-
-import { toast } from 'angular2-materialize';
-import { toastDuration } from './../../../environments/environment';
-import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { Component } from '@angular/core';
 
 import { AuthService } from './../../services/auth/auth.service';
 
 import { AppError } from './../../common/errors/app-error';
 import { InvalidCredentialsError } from './../../common/errors/invalid-credentials-error';
+
+import 'rxjs/add/operator/finally';
 
 @Component({
   selector: 'login',
@@ -16,22 +15,28 @@ import { InvalidCredentialsError } from './../../common/errors/invalid-credentia
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  constructor(
-      private authService: AuthService,
-      private router: Router,
-      private loadingSpinner: Ng4LoadingSpinnerService) {}
+  isLoggingIn:        boolean;
+  failedLoginMessage: string;
 
-  login(email, password): void {
-    this.loadingSpinner.show();
-    this.authService.login(email.value, password.value)
-      .then(
+  constructor(
+    private authService:  AuthService,
+    private router:       Router
+  ) {}
+
+  login(loginForm: NgForm): void {
+    this.isLoggingIn = true;
+    this.failedLoginMessage = null;
+
+    this.authService.login(loginForm.value.email, loginForm.value.password)
+      .finally(() => this.isLoggingIn = false)
+      .subscribe(
         () => this.router.navigate(['/context']),
-        (error: AppError) => {
-          if(error instanceof InvalidCredentialsError)
-            return toast('Algo en la información que ingresaste está mal', toastDuration)
-        
-          throw error;
-        })
-        .then(() => this.loadingSpinner.hide(), () => this.loadingSpinner.hide());
+        error => {
+          if(error instanceof InvalidCredentialsError) 
+            this.failedLoginMessage = 'La información ingresada es incorrecta.';
+          else
+            throw error;
+        }
+      );
   }
 }

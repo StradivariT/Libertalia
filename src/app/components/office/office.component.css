@@ -1,13 +1,19 @@
-.container {
-    margin-top: 1rem;    
-    max-width: 90%;
-    width: 90%;
+.modal-footer {
+    margin-top: 1.5em;
 }
 
-.input-field {
-    margin-top:2rem;
+.m-w {
+    margin-right: 29em;
 }
 
-.modal-trigger:hover {
-    cursor: pointer;
+.not {
+    margin-top: 0.2em;
+}
+
+.act {
+    padding-bottom: 0.2em;
+}
+
+#som {
+    padding-top: 0.8em;
 }

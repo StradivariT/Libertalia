@@ -1,0 +1,36 @@
+<div class="card">
+  <div class="card-header">
+    {{ title }}
+  </div>
+  <div class="card-block">
+    <div class="card-text">
+      <span [class.group-file-name]="groupFileName" (click)="downloadFile()">
+        <clr-icon shape="file" *ngIf="groupFileName"></clr-icon>
+        {{ groupFileName || 'No hay archivo disponible.' }}
+      </span>
+    </div>
+
+    <br>
+
+    <div class="card-title">
+      Subir archivo
+    </div>
+    <div class="card-text">
+      Hacer esto reemplazará el archivo existente.
+      <br>
+      <button class="btn btn-primary file-button" (click)="groupFileInput.click()" [disabled]="isLoading">seleccionar archivo</button>
+      {{ selectedGroupFileName }}
+      <input
+        type="file"
+        onclick="this.value = null"
+        [disabled]="isLoading"
+        (change)="selectFile(groupFileInput.files[0])"
+        #groupFileInput
+        hidden>
+    </div>
+  </div>
+  <div class="card-footer">
+    <button class="btn btn-sm btn-primary" [disabled]="!groupFile || isLoading" (click)="uploadFile()">Subir</button>
+    <spinner *ngIf="isLoading"></spinner>
+  </div>
+</div>

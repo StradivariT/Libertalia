@@ -1,68 +1,86 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ErrorHandler } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MaterializeModule } from 'angular2-materialize';
+import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
+import { FormsModule }   from '@angular/forms';
+import { NgModule, ErrorHandler } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AngularFireModule } from 'angularfire2';
-import { AngularFireAuthModule } from 'angularfire2/auth';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
-import 'firebase/storage';
-
-import { environment } from './../environments/environment';
 import { routes } from './app.routes';
-import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+
+import { ToastyModule } from 'ng2-toasty';
+import { ClarityModule } from "@clr/angular";
+
+import { AuthService } from './services/auth/auth.service';
+import { HttpService } from './services/http/http.service';
+import { GroupService } from './services/group/group.service';
+import { AuthGuard } from './services/auth/auth-guard.service';
+import { CourseService } from './services/course/course.service';
+import { ContextService } from './services/context/context.service';
+import { SessionGuard } from './services/auth/session-guard.service';
+import { StudentsService } from './services/students/students.service';
+import { EducPlanService } from './services/educ-plan/educ-plan.service';
+import { ActivitiesService } from './services/activities/activities.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-import { NavbarComponent } from './components/auth-wrapper/navbar/navbar.component';
-import { AuthWrapperComponent } from './components/auth-wrapper/auth-wrapper.component';
-import { ContextComponent } from './components/context/context.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { OfficeComponent } from './components/office/office.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 import { StudentsComponent } from './components/office/students/students.component';
-import { AssignmentsComponent } from './components/office/students/assignments/assignments.component';
+import { GroupFilesComponent } from './components/group-files/group-files.component';
+import { ContextEditComponent } from './components/context-edit/context-edit.component';
+import { ActivitiesComponent } from './components/office/activities/activities.component';
+import { ContextWizardComponent } from './components/context-wizard/context-wizard.component';
+import { GroupFilesCardComponent } from './components/group-files/group-files-card/group-files-card.component';
+import { ActivitiesHeaderComponent } from './components/office/activities/activities-header/activities-header.component';
+import { ContextWizardStepComponent } from './components/context-wizard/context-wizard-step/context-wizard-step.component';
+import { ActivitiesDescriptionComponent } from './components/office/activities/activities-description/activities-description.component';
 
-import { AuthService } from './services/auth/auth.service';
-import { AuthGuard } from './services/auth/auth-guard.service';
-import { PreventLoginAccess } from './services/auth/prevent-login-access.service';
-import { ContextService } from './services/context/context.service';
-import { StudentsService } from './services/students/students.service';
-import { AssignmentsService } from './services/assignments/assignments.service';
+import { OrderPipe } from './common/pipes/order-by.pipe';
 
 import { AppErrorHandler } from './common/errors/app-error-handler';
-import { FilterPipe } from './common/pipes/filter-pipe';
+
 
 @NgModule({
   declarations: [
+    OrderPipe,
     AppComponent,
     LoginComponent,
+    OfficeComponent,    
     NavbarComponent,
-    AuthWrapperComponent,
-    ContextComponent,
-    FilterPipe,
-    OfficeComponent,
+    SpinnerComponent,
     StudentsComponent,
-    AssignmentsComponent
+    ActivitiesComponent,
+    GroupFilesComponent,
+    ContextEditComponent,
+    ContextWizardComponent,
+    GroupFilesCardComponent,
+    ActivitiesHeaderComponent,
+    ContextWizardStepComponent,
+    ActivitiesDescriptionComponent,
   ],
   imports: [
-    BrowserModule,
-    FormsModule,
-    MaterializeModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig, 'Libertalia'),
-    AngularFireAuthModule,
-    AngularFirestoreModule,
+    HttpModule,
+    FormsModule,    
     RouterModule,
-    RouterModule.forRoot(routes),
-    Ng4LoadingSpinnerModule.forRoot()
+    BrowserModule,
+    ClarityModule,
+    ToastyModule.forRoot(),
+    BrowserAnimationsModule,    
+    RouterModule.forRoot(routes)
   ],
   providers: [
-    { provide: ErrorHandler, useClass: AppErrorHandler },
-    AuthService,
     AuthGuard,
-    PreventLoginAccess,
+    HttpService,
+    AuthService,
+    GroupService,
+    SessionGuard,
+    CourseService,
     ContextService,
+    EducPlanService,
     StudentsService,
-    AssignmentsService
+    ActivitiesService,
+    { provide: ErrorHandler, useClass: AppErrorHandler }
   ],
   bootstrap: [AppComponent]
 })

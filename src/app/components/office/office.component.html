@@ -1,42 +1,47 @@
-<div class="container">
-  <div class="card hoverable horizontal">
-    <div class="card-stacked">
-      <div class="card-content">
-        <h5>
-          Curso: {{ currentContext.courseName }} &nbsp;&nbsp;&nbsp;&nbsp; Grupo: {{ currentContext.groupName }}
-          <i class="material-icons modal-trigger right" data-target="editContext">edit</i>
-        </h5>
+<div class="main-container">
+  <navbar (courseInfoUpdated)="displayAlert($event)"></navbar>
+
+  <div class="content-container">
+    <div class="content-area">
+      <div class="row" *ngIf="isAlertOpen">
+        <div class="col-xs-12">
+          <clr-alert
+            [clrAlertType]="alertType"
+            (clrAlertClosedChange)="closeAlert()">
+            <div clr-alert-item class="alert-item">
+              <span class="alert-text">{{ alertMessage }}</span>
+            </div>
+          </clr-alert>
+        </div>
+        <br>
       </div>
-    </div>
-  </div>
 
-  <div materialize="modal" id="editContext" class="modal">
-    <div class="modal-content">
-      <h4>Editar Curso / Grupo</h4>
-
-      <div class="row">
-        <div class="input-field col s6">
-          <input [(ngModel)]="currentContext.courseName" id="courseName" type="text">
-          <label for="courseName">Curso</label>
+      <div *ngIf="noStudents">
+        <div class="row flex-items-xs-center" >
+          <h3>No hay estudiantes registrados en este grupo.</h3>
         </div>
 
-        <div class="input-field col s6">
-          <input [(ngModel)]="currentContext.groupName" id="groupName" type="text">
-          <label for="groupName">Grupo</label>
+        <br>
+
+        <div class="row flex-items-xs-center" *ngIf="isLoading">
+          <spinner></spinner>
         </div>
       </div>
+
+      <activities
+        #activities
+        *ngIf="!noStudents"
+        [studentSelected]="studentSelected"
+        (alertEmitter)="displayAlert($event)">
+      </activities>
     </div>
 
-    <div class="modal-footer">
-      <a (click)="editContext()" class="modal-action modal-close waves-effect waves-light blue darken-3 btn">guardar cambios</a>
-    </div>
-  </div>
-  
-  <ul materialize="tabs" class="tabs text-black">
-    <li class="tab col s4"><a class="black-text active" href="#students-tab">Alumnos</a></li>
-  </ul>
-
-  <div id="students-tab">
-    <router-outlet></router-outlet>
+    <nav class="sidenav">
+      <students
+        (studentAdded)="displayAlert($event)"
+        (noStudents)="displayNoStudents($event)"
+        (studentSelected)="studentSelected = $event">
+      </students>
+    </nav>
   </div>
 </div>

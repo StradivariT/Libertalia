@@ -1,0 +1,134 @@
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
+import { HttpService } from './../../../services/http/http.service';
+import { GroupService } from './../../../services/group/group.service';
+import { CourseService } from './../../../services/course/course.service';
+import { EducPlanService } from './../../../services/educ-plan/educ-plan.service';
+
+import { Context } from './../../../common/interfaces/context';
+import { ContextResource } from '../../../common/interfaces/context-resource';
+
+import { AppError } from './../../../common/errors/app-error';
+import { NotFoundError } from './../../../common/errors/not-found-error';
+import { BadRequestError } from './../../../common/errors/bad-request-error';
+
+@Component({
+  selector: 'context-wizard-step',
+  templateUrl: './context-wizard-step.component.html',
+  styleUrls: ['./context-wizard-step.component.css']
+})
+export class ContextWizardStepComponent implements OnInit {
+  @Input("currentStep") currentStep: number;
+  @Input("context")     context:     Context;
+
+  @Output("emptyResources")   emptyResources   = new EventEmitter<boolean>();
+  @Output("selectedResource") selectedResource = new EventEmitter<object>();
+
+  newResource:      string;
+  isLoading:        boolean;
+  resourceAdded:    boolean;
+  resourceError:    boolean;
+  resourceSelected: ContextResource;
+  contextResources: ContextResource[];
+  
+  private resourceServices: HttpService[];
+  private previousResource: ContextResource;
+
+  constructor(
+    private educPlanService: EducPlanService,
+    private courseService:   CourseService,
+    private groupService:    GroupService
+  ) {}
+
+  ngOnInit() {
+    this.resourceSelected = null;
+    this.previousResource = null;
+
+    this.contextResources = [];
+    this.resourceServices = [
+      this.educPlanService,
+      this.courseService,
+      this.groupService
+    ];
+
+    if(this.currentStep != 0)
+      return;
+
+    this.getResources(this.educPlanService);
+  }
+
+  addResource(): void {
+    this.isLoading = true;
+    this.resourceAdded = false;
+    this.resourceError = false;
+
+    let parentId = this.previousResource ? this.previousResource.id : null;
+
+    this.resourceServices[this.currentStep].create({newResource: this.newResource}, parentId)
+      .finally(() => this.isLoading = false)
+      .subscribe(
+        response => {
+          this.contextResources.push(response.json().newResource as ContextResource);
+
+          if(this.contextResources.length == 1) {
+            this.resourceSelected = this.contextResources[0];
+            this.emitSelectedResource(this.resourceSelected);
+          }
+            
+          this.newResource = '';
+          this.resourceAdded = true;
+          this.emptyResources.emit(false);
+        },
+        (error: AppError) => {
+          if(error instanceof BadRequestError)
+            return this.resourceError = true;
+
+          throw error; 
+        }
+      );
+  }
+
+  nextStep(previousResource: ContextResource): void {
+    if(this.currentStep == 0 || this.currentStep == undefined)
+      return;
+
+    this.previousResource = previousResource;
+
+    this.getResources(this.resourceServices[this.currentStep], this.previousResource.id);
+  }
+
+  compareResources(resource1: ContextResource, resource2: ContextResource): boolean {
+    return resource1 && resource2 ? resource1.id == resource2.id : resource1 === resource2;
+  }
+
+  private getResources(resourceService: HttpService, parentId?: number): void {
+    this.isLoading = true;
+    this.contextResources = [];
+    this.resourceSelected = null;
+
+    resourceService.getAll(parentId)
+      .finally(() => this.isLoading = false)
+      .subscribe(
+        response => {
+          this.contextResources = response.json().resources as ContextResource[];
+          this.emptyResources.emit(false);
+
+          this.resourceSelected = this.contextResources[0];
+          this.emitSelectedResource(this.contextResources[0]);
+        },
+        (error: AppError) => {
+          if(error instanceof NotFoundError)
+            return this.emptyResources.emit(true);
+
+          throw error;
+        }
+      );
+  }
+
+  private emitSelectedResource(contextResource: ContextResource): void {
+    this.selectedResource.emit({
+      contextResource: contextResource,
+      step: this.currentStep
+    });
+  }
+}

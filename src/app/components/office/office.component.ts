@@ -1,61 +1,43 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 
-import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { toast } from 'angular2-materialize';
-import { toastDuration } from './../../../environments/environment';
+import { ActivitiesComponent } from './activities/activities.component';
 
-import { CurrentContext } from './../../common/interfaces/CurrentContext';
-
-import { ContextService } from '../../services/context/context.service';
+import { Alert } from './../../common/interfaces/alert';
+import { Student } from '../../common/interfaces/student';
 
 @Component({
-  selector: 'app-office',
+  selector: 'office',
   templateUrl: './office.component.html',
   styleUrls: ['./office.component.css']
 })
 export class OfficeComponent implements OnInit {
-  currentContext: CurrentContext;
+  @ViewChild('activities') activities: ActivitiesComponent;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private contextService: ContextService,
-    private loadingSpinner: Ng4LoadingSpinnerService
-  ) {}
+  alertMessage:    string;
+  alertType:       string;
+  isAlertOpen:     boolean;
+  noStudents:      boolean;
+  isLoading:       boolean;
+  studentSelected: Student;
+
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.route.paramMap
-      .subscribe(params => {
-        this.currentContext = {
-          courseId: params.get('courseId'),
-          courseName: params.get('courseName'),
-          groupId: params.get('groupId'),
-          groupName: params.get('groupName') 
-        };
-      });
+    this.isLoading = true;
+    this.noStudents = true;
   }
 
-  editContext() {
-    this.loadingSpinner.show();
-
-    this.contextService.updateContext(this.currentContext)
-    .then(() => {
-      this.loadingSpinner.hide();
-      toast('La información del curso y grupo ha sido actualizada.', toastDuration);
-
-      this.router.navigate([
-        'office/students',
-        this.currentContext.courseName, 
-        this.currentContext.courseId,
-        this.currentContext.groupName,
-        this.currentContext.groupId
-      ]);
-    }, this.handleError);
+  displayAlert(alertInfo: Alert): void {
+    this.isAlertOpen = true;
+    this.alertMessage = alertInfo.message;
+    this.alertType = alertInfo.type;
   }
 
-  private handleError(error) {
-    this.loadingSpinner.hide();
-    throw error;
+  displayNoStudents(noStudents: boolean) {
+    this.isLoading = false;
+    this.noStudents = noStudents;
+    this.changeDetector.detectChanges();
   }
+
+  closeAlert(): void { this.isAlertOpen = false; }
 }

@@ -1,41 +1,77 @@
-<div class="container" id="login-container">
-  <div class="row center-align">
-    <img class="responsive-img" src="../assets/libertalia.png">
-
-    <div class="card hoverable">
-      <div class="card-content">
-        <div class="input-field">
-          <i class="material-icons prefix">account_circle</i>
-          <input
-            required
-            email
-            ngModel
-            name = "email"
-            #email="ngModel"
-            id="email"
-            type="email"
-            class="validate">
-          <label data-error="Ingresa un email válido" for="email">Email</label>
-        </div>
-
-        <div class="input-field">
-          <i class="material-icons prefix">lock</i>
-          <input
-            required
-            ngModel
-            name="password"
-            #password="ngModel"
-            id="password"
-            type="password"
-            class="validate">
-          <label for="password">Contraseña</label>
-        </div>
-
-        <button
-          [disabled]="email.invalid || password.invalid"
-          (click)="login(email, password)" 
-          class="waves-effect waves-light blue darken-3 btn">iniciar sesión</button>
-      </div>
+<div class="container">
+    <div class="row flex-items-xs-center">
+        <h1>Libertalia</h1>
     </div>
-  </div>
+
+    <div class="row flex-items-xs-center">
+        <div class="col-xs-5">
+            <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+                <div class="form-block">
+                    <label
+                        for="email"
+                        aria-haspopup="true"
+                        role="tootltip"
+                        class="tooltip tooltip-validation tooltip-md"
+                        [class.invalid]="email.invalid && (email.dirty || email.touched)">
+                        <input
+                            required
+                            email
+                            ngModel
+                            [disabled]="isLoggingIn"
+                            type="email"
+                            id="email"
+                            name="email"
+                            #email="ngModel"
+                            placeholder="Email"
+                            size="44">
+                        <span class="tooltip-content">Ingresa un email válido.</span>
+                    </label>
+                    
+                    <br><br>
+                    
+                    <label 
+                        for="password"
+                        aria-haspopup="true"
+                        role="tootltip"
+                        class="tooltip tooltip-validation tooltip-md"
+                        [class.invalid]="password.invalid && (password.dirty || password.touched)">
+                        <input
+                            required
+                            ngModel
+                            [disabled]="isLoggingIn"
+                            type="password"
+                            id="password"
+                            name="password"
+                            #password="ngModel"
+                            placeholder="Contraseña"
+                            size="44">
+                        <span class="tooltip-content">Ingresa tu contraseña.</span>
+                    </label>
+                </div>
+                
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-block"
+                    [disabled]="loginForm.form.invalid || isLoggingIn">
+                iniciar sesión
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row flex-items-xs-center">
+        <div class="col-xs-5">
+            <clr-alert [clrAlertType]="'alert-danger'" [(clrAlertClosed)]="!failedLoginMessage">
+                <div class="alert-item">
+                    <span class="alert-text">
+                        {{ failedLoginMessage }}
+                    </span>
+                </div>
+            </clr-alert>
+        </div>
+    </div>
+
+    <div class="row flex-items-xs-center" id="login-spinner" *ngIf="isLoggingIn">
+        <spinner></spinner>
+    </div>
 </div>

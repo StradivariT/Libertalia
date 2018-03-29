@@ -1,57 +1,64 @@
-<!-- Students filter -->
-<div class="row">
-  <div class="col s6">
-    <div class="input-field">
-      <input id="studentFilter" [(ngModel)]="studentFilter" type="text">
-      <label for="studentFilter">Filtrar por nombre</label>
+<section class="sidenav-content">
+  <section class="nav-group">
+    <label>Alumnos</label>
+    
+    <ul class="nav-list">
+      <li *ngFor="let student of students | orderBy: 'number'">
+        <a
+          class="nav-link"
+          [class.active]="studentIDSelected == student.id"
+          (click)="selectStudent(student)">
+        {{ student.number }} - {{ student.name }}</a>
+      </li>
+      <li><a class="nav-link" (click)="isAddStudentModalOpen = true">Agregar alumno</a></li>
+    </ul>
+  </section>
+</section>
+
+<clr-modal
+  [clrModalSize]="'lg'"
+  [clrModalClosable]="false"
+  [(clrModalOpen)]="isAddStudentModalOpen">
+  <h3 class="modal-title">Agregar alumno</h3>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-4">
+        <input
+          type="number"
+          size="99"
+          placeholder="Número del alumno"
+          [disabled]="isLoading"
+          [(ngModel)]="newStudentNumber">
+      </div>
+      
+      <div class="col-xs-8">
+        <input
+          type="text"
+          size="99"
+          placeholder="Nombre del alumno"
+          [disabled]="isLoading"
+          [(ngModel)]="newStudentName">
+      </div>
     </div>
   </div>
-  <div class="col s6">
-    <div class="input-field">
-      <input id="studentNum" [(ngModel)]="studentNum" type="number">
-      <label for="studentNum">Número de alumno</label>
+
+  <div class="modal-footer">
+    <div class="modal-spinner">
+      <spinner *ngIf="isLoading"></spinner>
     </div>
+
+    <button
+      type="button"
+      class="btn btn-outline"
+      [disabled]="isLoading"
+      (click)="closeAddStudentModal()">
+    Cancelar</button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="newStudentName == '' || newStudentName == null || newStudentNumber == null || isLoading"
+      (click)="addStudent()">
+    Agregar</button>
   </div>
-</div>
-
-
-<!-- Students body -->
-<ul materialize="collapsible" class="collapsible" data-collapsible="expandable" *ngIf="students && (students | filter: studentFilter).length != 0">
-  <li *ngFor="let student of students | filter: studentFilter">
-    <div class="collapsible-header">
-      <i class="material-icons">person</i>{{ student.number }} - {{ student.name }}
-    </div>
-
-    <div class="collapsible-body">
-        <div class="row">
-          <div class="col s4">
-            <div class="input-field">
-              <input id="studentFilter" [(ngModel)]="student.name" type="text">
-              <label for="studentFilter">Nombre del alumno</label>
-            </div>
-          </div>
-          <div class="col s4">
-            <div class="input-field">
-              <input id="studentNum" [(ngModel)]="student.number" type="number">
-              <label for="studentNum">Número de alumno</label>
-            </div>
-          </div>
-          <div class="col s4">
-            <div class="input-field">
-              <a (click)="updateStudent(student)" class="waves-effect waves-light blue darken-3 btn">actualizar alumno</a>
-            </div>
-          </div>
-        </div>
-
-      <assignments [studentId]="student.id"></assignments>
-    </div>
-  </li> 
-</ul>
-
-<a
-  *ngIf="students && (students | filter: studentFilter).length == 0"
-  [class.disabled]="studentFilter.length == 0 && studentNum == 0"
-  (click)="addStudent()"
-  class="waves-effect waves-light blue darken-3 btn">
-agregar nuevo alumno
-</a>
+</clr-modal>

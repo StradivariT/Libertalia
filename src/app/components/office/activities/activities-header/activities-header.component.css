@@ -1,0 +1,21 @@
+#edit-student-modal-spinner {
+    margin-right: 28em;
+    padding-top: 0.6em;
+}
+
+#add-activity-modal-spinner {
+    margin-right: 29em;
+    padding-top: 0.6em;
+}
+
+#add-activity-modal-date {
+    padding-top: 0.8em;
+}
+
+#add-activity-button {
+    margin-top: 1.5em;
+}
+
+#edit-student-icon:hover {
+    cursor: pointer;
+}

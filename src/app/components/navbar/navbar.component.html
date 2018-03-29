@@ -1,0 +1,83 @@
+<header class="header-2">
+  <div class="branding">
+    <a (click)="changeRoute('/office')" class="title">Libertalia</a>
+  </div>
+
+  <div class="header-nav">
+    <span class="nav-link nav-text">
+      Plan educativo: {{ contextSelected.educPlanName }} / Curso: {{ contextSelected.courseName }} / Grupo: {{ contextSelected.groupName }} 
+    </span>
+  </div>
+
+  <div class="header-nav">
+    <a class="nav-link nav-text" (click)="isEditCourseInfoModalOpen = true">
+     Información del curso 
+    </a>
+  </div>
+
+  <div class="header-nav">
+    <a class="nav-link nav-text" (click)="changeRoute('/groupFiles')">
+      Archivos del grupo
+    </a>
+  </div>
+
+  <div class="header-actions">
+    <clr-dropdown>
+      <button class="nav-icon" clrDropdownTrigger>
+        <clr-icon shape="cog"></clr-icon>
+      </button>
+
+      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+        <a clrDropdownItem (click)="changeRoute('/office')">Oficina</a>
+        <a clrDropdownItem [routerLink]="['/context']">Seleccionar contexto</a>
+        <a clrDropdownItem (click)="changeRoute('/contextEdit')">Editar contexto</a>
+        <a clrDropdownItem (click)="logout()">Cerrar sesión</a>
+      </clr-dropdown-menu>
+    </clr-dropdown>
+  </div>
+</header>
+
+<clr-modal
+  [clrModalSize]="'xl'"
+  [clrModalClosable]="false"
+  [clrModalStaticBackdrop]="true"
+  [(clrModalOpen)]="isEditCourseInfoModalOpen">
+  <h3 class="modal-title">
+    Información del curso: {{ contextSelected.courseName }}
+    &nbsp;
+    <clr-icon
+      id="edit-info-icon"
+      shape="edit"
+      (click)="isEditCourseInfoTextAreaOpen = !isEditCourseInfoTextAreaOpen">
+    </clr-icon>
+  </h3>
+
+  <div class="modal-body">
+    <p id="course-info" *ngIf="!isEditCourseInfoTextAreaOpen">{{ courseInfo }}</p>
+    <textarea
+      *ngIf="isEditCourseInfoTextAreaOpen"
+      rows="3"
+      [disabled]="isLoading"      
+      [(ngModel)]="courseInfoEditable">
+    </textarea>
+  </div>
+
+  <div class="modal-footer">
+    <div class="modal-spinner">
+      <spinner *ngIf="isLoading"></spinner>
+    </div>
+  
+    <button
+      type="button"
+      class="btn btn-outline"
+      [disabled]="isLoading"
+      (click)="closeEditCourseInfoModal()">
+    cerrar</button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="courseInfoEditable == null || courseInfoEditable == '' || courseInfoEditable == courseInfo || isLoading"
+      (click)="updateCourseInfo()">
+    actualizar</button>
+  </div>
+</clr-modal>

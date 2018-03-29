@@ -1,0 +1,12 @@
+.nav-text:hover, #edit-info-icon:hover, .title:hover {
+    cursor: pointer;
+}
+
+.modal-spinner {
+    margin-right: 50em;
+    padding-top: 0.6em;
+}
+
+#course-info {
+    white-space: pre;
+}
