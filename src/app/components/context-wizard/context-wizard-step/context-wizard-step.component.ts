@@ -59,13 +59,17 @@ export class ContextWizardStepComponent implements OnInit {
   }
 
   addResource(): void {
+    let parentId = this.previousResource ? this.previousResource.id : null;
+
+    let newResource = {
+      newResource: this.newResource
+    };
+
     this.isLoading = true;
     this.resourceAdded = false;
     this.resourceError = false;
 
-    let parentId = this.previousResource ? this.previousResource.id : null;
-
-    this.resourceServices[this.currentStep].create({newResource: this.newResource}, parentId)
+    this.resourceServices[this.currentStep].create(newResource, parentId)
       .finally(() => this.isLoading = false)
       .subscribe(
         newResource => {

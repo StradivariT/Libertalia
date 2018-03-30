@@ -5,3 +5,11 @@
 .modal-footer {
     margin-top: 1em;
 }
+
+input {
+    width: 100%;
+}
+
+input[type=number] {
+    width: 70%;
+}

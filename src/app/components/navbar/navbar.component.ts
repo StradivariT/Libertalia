@@ -26,6 +26,8 @@ export class NavbarComponent implements OnInit {
   courseInfoEditable:           string;
   contextSelected:              any;
 
+  private updatedCourseAlert: Alert
+
   constructor(
     private authService:   AuthService,
     private courseService: CourseService,
@@ -36,6 +38,11 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.contextSelected = this.route.snapshot.params;
     this.courseInfo = 'No hay información para el curso.'
+    
+    this.updatedCourseAlert = {
+      type:    'alert-success',
+      message: 'La información del curso se actualizó correctamente.'
+    };
 
     this.courseService.getSingle(this.contextSelected.courseId)
       .subscribe(
@@ -56,18 +63,18 @@ export class NavbarComponent implements OnInit {
   }
 
   updateCourseInfo(): void {
-    this.isLoading = true;
+    let updatedCourseInfo = {
+      information: this.courseInfoEditable
+    };
 
-    this.courseService.update({information: this.courseInfoEditable}, this.contextSelected.courseId)
+    this.isLoading = true;
+    this.courseService.update(updatedCourseInfo, this.contextSelected.courseId)
       .finally(() => this.isLoading = false)
       .subscribe(
         updatedCourseInfo => {
           this.courseInfo = updatedCourseInfo;
           this.closeEditCourseInfoModal();
-          this.courseInfoUpdated.emit({
-            type: 'alert-success',
-            message: 'La información del curso se actualizó correctamente.'
-          });
+          this.courseInfoUpdated.emit(this.updatedCourseAlert);
         }
       );
   }
