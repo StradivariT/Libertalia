@@ -18,7 +18,7 @@ export class AuthService extends HttpService {
   login(credentials: Credentials): Observable<Response> {
     return this.http.post(this.url + this.endpoint, credentials)
       .map((response: Response) => {
-        const token = response.json().token;
+        const token = response.json();
         localStorage.setItem('token', token);
 
         return null;

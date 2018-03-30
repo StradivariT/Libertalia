@@ -19,8 +19,8 @@ export class HttpService {
   protected token: string;
 
   constructor(
-    protected http:           Http,
-    protected endpoint:       string,
+    protected http:         Http,
+    protected endpoint:     string,
     private parentEndpoint: string
   ) {
     this.url = laravelURL;
@@ -34,11 +34,13 @@ export class HttpService {
 
   getAll(parentId?: number): Observable<any> {
     return this.http.get(this.url + this.parentEndpoint + (parentId || '') + this.endpoint + this.token)
+      .map(response => { return response.json(); })
       .catch(this.handleError);
   }
 
   create(data: any, parentId?: number): Observable<any> {
     return this.http.post(this.url + this.parentEndpoint + (parentId || '') + this.endpoint + this.token, data)
+      .map(response => { return response.json(); })
       .catch(this.handleError);
   }
 

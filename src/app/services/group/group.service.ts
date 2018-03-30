@@ -1,5 +1,5 @@
-import { Http, ResponseContentType } from '@angular/http';
 import { Injectable } from '@angular/core';
+import { Http, ResponseContentType } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 
