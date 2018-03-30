@@ -9,4 +9,4 @@ export const environment = {
 
 export const unexpectedErrorMessage = 'Ocurrió un error con el servidor, intenta de nuevo.';
 
-export const laravelURL = 'http://localhost:8000/api';
+export const shambhalaURL = 'http://localhost:8000/api';

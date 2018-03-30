@@ -6,7 +6,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import { Observable } from 'rxjs/Observable';
 
-import { laravelURL } from './../../../environments/environment';
+import { shambhalaURL } from './../../../environments/environment';
 
 import { AppError } from './../../common/errors/app-error';
 import { NotFoundError } from './../../common/errors/not-found-error';
@@ -23,12 +23,13 @@ export class HttpService {
     protected endpoint:     string,
     private parentEndpoint: string
   ) {
-    this.url = laravelURL;
+    this.url = shambhalaURL;
     this.token = '?token=' + localStorage.getItem('token');
   }
 
   getSingle(id: number): Observable<any> {
     return this.http.get(this.url + this.endpoint + '/' + id + this.token)
+      .map(response => { return response.json(); })
       .catch(this.handleError);
   }
 
@@ -46,6 +47,7 @@ export class HttpService {
 
   update(data: any, id: number): Observable<any> {
     return this.http.patch(this.url + this.endpoint + '/' + id + this.token, data)
+      .map(response => { return response.json(); })
       .catch(this.handleError);
   }
 

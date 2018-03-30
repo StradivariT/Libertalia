@@ -1,6 +1,6 @@
 <header class="header-2">
   <div class="branding">
-    <a (click)="changeRoute('/office')" class="title">Libertalia</a>
+    <a class="title" (click)="navigateWithContextParams('/office')">Libertalia</a>
   </div>
 
   <div class="header-nav">
@@ -16,7 +16,7 @@
   </div>
 
   <div class="header-nav">
-    <a class="nav-link nav-text" (click)="changeRoute('/groupFiles')">
+    <a class="nav-link nav-text" (click)="navigateWithContextParams('/groupFiles')">
       Archivos del grupo
     </a>
   </div>
@@ -28,9 +28,9 @@
       </button>
 
       <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-        <a clrDropdownItem (click)="changeRoute('/office')">Oficina</a>
+        <a clrDropdownItem (click)="navigateWithContextParams('/office')">Oficina</a>
         <a clrDropdownItem [routerLink]="['/context']">Seleccionar contexto</a>
-        <a clrDropdownItem (click)="changeRoute('/contextEdit')">Editar contexto</a>
+        <a clrDropdownItem (click)="navigateWithContextParams('/contextEdit')">Editar contexto</a>
         <a clrDropdownItem (click)="logout()">Cerrar sesión</a>
       </clr-dropdown-menu>
     </clr-dropdown>
@@ -72,12 +72,14 @@
       class="btn btn-outline"
       [disabled]="isLoading"
       (click)="closeEditCourseInfoModal()">
-    cerrar</button>
+    cerrar
+    </button>
     <button
       type="button"
       class="btn btn-primary"
-      [disabled]="courseInfoEditable == null || courseInfoEditable == '' || courseInfoEditable == courseInfo || isLoading"
+      [disabled]="!courseInfoEditable || courseInfoEditable == courseInfo || isLoading"
       (click)="updateCourseInfo()">
-    actualizar</button>
+    actualizar
+    </button>
   </div>
 </clr-modal>

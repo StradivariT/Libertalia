@@ -39,8 +39,8 @@ export class NavbarComponent implements OnInit {
 
     this.courseService.getSingle(this.contextSelected.courseId)
       .subscribe(
-        response => {
-          this.courseInfo = response.json().information;
+        courseInfo => {
+          this.courseInfo = courseInfo;
           this.courseInfoEditable = this.courseInfo;
         },
         (error: AppError) => {
@@ -52,18 +52,7 @@ export class NavbarComponent implements OnInit {
 
           throw error;
         }
-      )
-  }
-
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/']);
-  }
-
-  closeEditCourseInfoModal(): void {
-    this.isEditCourseInfoTextAreaOpen = false;
-    this.isEditCourseInfoModalOpen = false;
-    this.courseInfoEditable = this.courseInfo;
+      );
   }
 
   updateCourseInfo(): void {
@@ -72,21 +61,24 @@ export class NavbarComponent implements OnInit {
     this.courseService.update({information: this.courseInfoEditable}, this.contextSelected.courseId)
       .finally(() => this.isLoading = false)
       .subscribe(
-        response => {
-          this.courseInfo = response.json().information;
+        updatedCourseInfo => {
+          this.courseInfo = updatedCourseInfo;
           this.closeEditCourseInfoModal();
           this.courseInfoUpdated.emit({
             type: 'alert-success',
             message: 'La información del curso se actualizó correctamente.'
           });
-        },
-        (error: AppError) => {
-          throw error;
         }
       );
   }
 
-  changeRoute(route: string): void {
+  closeEditCourseInfoModal(): void {
+    this.isEditCourseInfoTextAreaOpen = false;
+    this.isEditCourseInfoModalOpen = false;
+    this.courseInfoEditable = this.courseInfo;
+  }
+
+  navigateWithContextParams(route: string): void {
     this.router.navigate(
       [
         route,
@@ -98,5 +90,10 @@ export class NavbarComponent implements OnInit {
         this.contextSelected.groupName
       ]
     ); 
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/']);
   }
 }
