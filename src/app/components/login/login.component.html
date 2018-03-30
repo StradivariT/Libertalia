@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <div class="row flex-items-xs-center" *ngIf="loginFailed">
+    <div class="row flex-items-xs-center" *ngIf="invalidCredentials">
         <div class="col-xs-5" >
             <clr-alert
                 [clrAlertType]="'alert-danger'"

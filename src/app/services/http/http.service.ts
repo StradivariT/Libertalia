@@ -6,9 +6,12 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import { Observable } from 'rxjs/Observable';
 
+import { laravelURL } from './../../../environments/environment';
+
 import { AppError } from './../../common/errors/app-error';
 import { NotFoundError } from './../../common/errors/not-found-error';
 import { BadRequestError } from './../../common/errors/bad-request-error';
+import { InvalidCredentialsError } from './../../common/errors/invalid-credentials-error';
 
 @Injectable()
 export class HttpService {
@@ -20,7 +23,7 @@ export class HttpService {
     protected endpoint:       string,
     private parentEndpoint: string
   ) {
-    this.url = 'http://localhost:8000/api';
+    this.url = laravelURL;
     this.token = '?token=' + localStorage.getItem('token');
   }
 
@@ -58,6 +61,9 @@ export class HttpService {
     if(error.status == 400)
       return Observable.throw(new BadRequestError(error));
 
+    if(error.status == 401)
+      return Observable.throw(new InvalidCredentialsError());
+  
     if(error.status == 404)
       return Observable.throw(new NotFoundError());
 

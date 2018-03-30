@@ -6,6 +6,8 @@ import 'rxjs/add/operator/finally';
 
 import { AuthService } from './../../services/auth/auth.service';
 
+import { Credentials } from './../../common/interfaces/credentials';
+
 import { AppError } from './../../common/errors/app-error';
 import { InvalidCredentialsError } from './../../common/errors/invalid-credentials-error';
 
@@ -15,8 +17,8 @@ import { InvalidCredentialsError } from './../../common/errors/invalid-credentia
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  isLoading:   boolean;
-  loginFailed: boolean;
+  isLoading:          boolean;
+  invalidCredentials: boolean;
 
   constructor(
     private authService: AuthService,
@@ -24,21 +26,26 @@ export class LoginComponent {
   ) {}
 
   login(loginForm: NgForm): void {
+    const credentials: Credentials = {
+      email:    loginForm.value.email,
+      password: loginForm.value.password
+    };
+
     this.closeAlert();
     this.isLoading = true;
 
-    this.authService.login(loginForm.value.email, loginForm.value.password)
+    this.authService.login(credentials)
       .finally(() => this.isLoading = false)
       .subscribe(
         () => this.router.navigate(['/context']),
         (error: AppError) => {
           if(error instanceof InvalidCredentialsError) 
-            return this.loginFailed = true;
+            return this.invalidCredentials = true;
 
           throw error;
         }
       );
   }
 
-  closeAlert(): void { this.loginFailed = false; }
+  closeAlert(): void { this.invalidCredentials = false; }
 }
