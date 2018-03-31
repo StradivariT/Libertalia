@@ -71,8 +71,8 @@ export class NavbarComponent implements OnInit {
     this.courseService.update(updatedCourseInfo, this.contextSelected.courseId)
       .finally(() => this.isLoading = false)
       .subscribe(
-        updatedCourseInfo => {
-          this.courseInfo = updatedCourseInfo;
+        updatedCourse => {
+          this.courseInfo = updatedCourse.information;
           this.closeEditCourseInfoModal();
           this.courseInfoUpdated.emit(this.updatedCourseAlert);
         }

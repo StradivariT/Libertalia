@@ -29,10 +29,10 @@
   
       <span *ngIf="!isEditingActivity">{{ activity.turnedInDate }}</span>
       <input
-      type="date"
-      *ngIf="isEditingActivity"
-      [disabled]="isUpdatingActivity"
-      [(ngModel)]="activityEditable.turnedInDate">
+        type="date"
+        *ngIf="isEditingActivity"
+        [disabled]="isUpdatingActivity"
+        [(ngModel)]="activityEditable.turnedInDate">
     </div>
   
     <div class="col-xs-4">
@@ -44,14 +44,14 @@
     </div>
   
     <div class="col-xs-4">
-        <h4>Calificación</h4>
-  
-        <span *ngIf="!isEditingActivity">{{ activity.grade || 'No hay calificación registrada.' }}</span>
-        <input
-          type="text"
-          *ngIf="isEditingActivity"
-          [disabled]="isUpdatingActivity"
-          [(ngModel)]="activityEditable.grade">
+      <h4>Calificación</h4>
+
+      <span *ngIf="!isEditingActivity">{{ activity.grade || 'No hay calificación registrada.' }}</span>
+      <input
+        type="text"
+        *ngIf="isEditingActivity"
+        [disabled]="isUpdatingActivity"
+        [(ngModel)]="activityEditable.grade">
     </div>
   </div>
   
@@ -94,14 +94,16 @@
         *ngIf="isEditingActivity"
         [disabled]="isUpdatingActivity"
         (click)="closeActivityEditable()">
-      cancelar</button>
+      cancelar
+      </button>
     
       <button
         class="btn btn-primary"
         *ngIf="isEditingActivity"
         [disabled]="isActivityEditableNotValid() || isUpdatingActivity"
         (click)="updateActivity()">
-      guardar</button>
+      guardar
+      </button>
 
       <spinner *ngIf="isUpdatingActivity"></spinner>
     </div>

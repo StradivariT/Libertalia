@@ -19,3 +19,15 @@
 #edit-student-icon:hover {
     cursor: pointer;
 }
+
+input[type=text] {
+    width: 100%;
+}
+
+input[type=number] {
+    width: 70%;
+}
+
+input[type=date] {
+    width: 55%;
+}

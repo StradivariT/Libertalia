@@ -1,12 +1,11 @@
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
+
 import { saveAs as downloadFileAs } from 'file-saver';
+
+import { ActivitiesService } from '../../../../services/activities/activities.service';
 
 import { Alert } from './../../../../common/interfaces/alert';
 import { Activity } from './../../../../common/interfaces/activity';
-
-import { AppError } from './../../../../common/errors/app-error';
-
-import { ActivitiesService } from '../../../../services/activities/activities.service';
 
 @Component({
   selector: 'activities-description',
@@ -15,6 +14,7 @@ import { ActivitiesService } from '../../../../services/activities/activities.se
 })
 export class ActivitiesDescriptionComponent implements OnInit, OnChanges {
   @Input('activitySelected') activitySelected: Activity;
+
   @Output('activityUpdated') activityUpdated = new EventEmitter<Alert>();
   
   isEditingActivity:  boolean;
@@ -23,12 +23,19 @@ export class ActivitiesDescriptionComponent implements OnInit, OnChanges {
   activity:           Activity;
   activityEditable:   Activity;
 
+  private activityUpdatedAlert: Alert;
+
   constructor(private activitiesService: ActivitiesService) {}
 
   ngOnInit() {
     this.activity = this.activityEditable = {
-      id: 0,
+      id:   0,
       name: ""
+    };
+
+    this.activityUpdatedAlert = {
+      type:    'alert-success',
+      message: 'La actividad se actualizó correctamente.'
     };
   }
 
@@ -42,33 +49,30 @@ export class ActivitiesDescriptionComponent implements OnInit, OnChanges {
     this.activitiesService.getSingle(this.activitySelected.id)
       .finally(() => this.isLoadingActivity = false)
       .subscribe(
-        response => {
-          this.activity = response.json().activity as Activity;
+        activity => {
+          this.activity = activity as Activity;
           this.handleActivityNulls();
-          this.closeActivityEditable();
-        },
-        (error: AppError) => {
-          throw error;
         }
       );
-  }
-
-  closeActivityEditable(): void {
-    this.isEditingActivity = false;
-    this.activityEditable = {
-      id: 0,
-      name: this.activity.name,
-      grade: this.activity.grade,
-      turnedInDate: this.activity.turnedInDate,
-      feedback: this.activity.feedback,
-      incidents: this.activity.incidents
-    };
   }
 
   isActivityEditableNotValid(): boolean {
     return (!this.activityEditable.name || !this.activityEditable.turnedInDate) ||
       (this.activityEditable.name == this.activity.name && this.activityEditable.turnedInDate == this.activity.turnedInDate &&
-      this.activityEditable.grade == this.activity.grade && this.activityEditable.feedback == this.activity.feedback && this.activityEditable.incidents == this.activity.incidents);
+      this.activityEditable.grade == this.activity.grade && this.activityEditable.feedback == this.activity.feedback &&
+      this.activityEditable.incidents == this.activity.incidents);
+  }
+
+  closeActivityEditable(): void {
+    this.isEditingActivity = false;
+    this.activityEditable = {
+      id:           0,
+      name:         this.activity.name,
+      grade:        this.activity.grade,
+      turnedInDate: this.activity.turnedInDate,
+      feedback:     this.activity.feedback,
+      incidents:    this.activity.incidents
+    };
   }
 
   updateActivity(): void {
@@ -77,32 +81,28 @@ export class ActivitiesDescriptionComponent implements OnInit, OnChanges {
     this.activitiesService.update(this.activityEditable, this.activity.id)
       .finally(() => this.isUpdatingActivity = false)
       .subscribe(
-        response => {
-          this.activity = response.json().activity as Activity;
+        activity => {
+          this.activity = activity as Activity;
           this.activitySelected.name = this.activity.name;
 
           this.handleActivityNulls();
-          this.closeActivityEditable();
-          
-          this.activityUpdated.emit({
-            type: 'alert-success',
-            message: 'La actividad se actualizó correctamente.'
-          });
-        },
-        (error: AppError) => {
-          throw error;
+          this.activityUpdated.emit(this.activityUpdatedAlert);
         }
       );
   }
 
   downloadFile(): void {
     this.activitiesService.download(this.activity.id)
-      .subscribe(response => downloadFileAs(response.blob(), this.activity.fileName));
+      .subscribe(
+        file => downloadFileAs(file, this.activity.fileName)
+      );
   }
 
   private handleActivityNulls(): void {
     this.activity.grade = (this.activity.grade || '');
     this.activity.feedback = (this.activity.feedback || '');
     this.activity.incidents = (this.activity.incidents || '');
+
+    this.closeActivityEditable();
   }
 }

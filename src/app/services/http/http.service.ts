@@ -53,6 +53,7 @@ export class HttpService {
 
   download(id: number): Observable<any> {
     return this.http.get(this.url + this.endpoint + '/' + id + '/file' + this.token, { responseType: ResponseContentType.Blob })
+      .map(response => { return response.blob(); })
       .catch(this.handleError);
   }
 
