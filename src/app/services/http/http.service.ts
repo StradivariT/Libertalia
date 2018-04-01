@@ -65,7 +65,7 @@ export class HttpService {
 
   protected handleError(error: Response): Observable<any> {
     if(error.status == 400)
-      return Observable.throw(new BadRequestError());
+      return Observable.throw(new BadRequestError(error));
 
     if(error.status == 401)
       return Observable.throw(new InvalidCredentialsError());

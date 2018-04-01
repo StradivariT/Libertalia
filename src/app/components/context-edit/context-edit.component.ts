@@ -1,10 +1,12 @@
-import { Alert } from './../../common/interfaces/alert';
-import { BadRequestError } from './../../common/errors/bad-request-error';
-import { AppError } from './../../common/errors/app-error';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ContextService } from 'app/services/context/context.service';
+
+import { Alert } from './../../common/interfaces/alert';
+
+import { AppError } from './../../common/errors/app-error';
+import { BadRequestError } from './../../common/errors/bad-request-error';
 
 @Component({
   selector: 'context-edit',
@@ -15,19 +17,31 @@ export class ContextEditComponent implements OnInit {
   contextSelected:         any;
   contextSelectedEditable: any;
   isLoading:               boolean;
-  hey: boolean;
-  alertMessage: string;
-  alertType: string;
+  isAlertOpen:             boolean;
+  alert:                   Alert;
+
+  private contextUpdatedAlert: Alert;
+  private contextErrorAlert:   Alert;
 
   constructor(
     private route:          ActivatedRoute,
-    private router: Router,
+    private router:         Router,
     private contextService: ContextService
   ) {}
 
   ngOnInit() {
     this.contextSelected = this.route.snapshot.params;
     this.contextSelectedEditable = JSON.parse(JSON.stringify(this.contextSelected));
+
+    this.contextUpdatedAlert = {
+      type:    'alert-success',
+      message: 'El contexto se actualizó correctamente.'
+    };
+
+    this.contextErrorAlert = {
+      type: 'alert-danger',
+      message: ''
+    };
   }
 
   isEditContextFormInvalid(): boolean {
@@ -38,53 +52,53 @@ export class ContextEditComponent implements OnInit {
   }
 
   updateContext(): void {
-    let data = {
+    this.closeAlert();
+
+    let updatedContextData = {
+      educPlanId:   this.contextSelected.educPlanId,
       educPlanName: this.contextSelectedEditable.educPlanName == this.contextSelected.educPlanName ? '' : this.contextSelectedEditable.educPlanName,
-      educPlanId: this.contextSelected.educPlanId,
-      courseName: this.contextSelectedEditable.courseName == this.contextSelected.courseName ? '' : this.contextSelectedEditable.courseName,
-      courseId: this.contextSelected.courseId,
-      groupName: this.contextSelectedEditable.groupName == this.contextSelected.groupName ? '' : this.contextSelectedEditable.groupName,
-      groupId: this.contextSelected.groupId
+      courseId:     this.contextSelected.courseId,
+      courseName:   this.contextSelectedEditable.courseName == this.contextSelected.courseName ? '' : this.contextSelectedEditable.courseName,
+      groupId:      this.contextSelected.groupId,
+      groupName:    this.contextSelectedEditable.groupName == this.contextSelected.groupName ? '' : this.contextSelectedEditable.groupName
     };
 
-    this.closeAlert();
     this.isLoading = true;
-    this.contextService.update(data, 0)
+    this.contextService.update(updatedContextData, 0)
       .finally(() => this.isLoading = false)
       .subscribe(
-        response => {
-          this.displayAlert({ type: 'alert-success', message: 'El contexto se actualizó correctamente.' });
-          response = response.json();
+        contextUpdated => {
+          this.displayAlert(this.contextUpdatedAlert);
 
           this.router.navigate([
             '/contextEdit',
             this.contextSelected.educPlanId,
-            response.educPlanName || this.contextSelected.educPlanName,
+            contextUpdated.educPlanName || this.contextSelected.educPlanName,
             this.contextSelected.courseId,
-            response.courseName || this.contextSelected.courseName,
+            contextUpdated.courseName || this.contextSelected.courseName,
             this.contextSelected.groupId,
-            response.groupName || this.contextSelected.groupName 
+            contextUpdated.groupName || this.contextSelected.groupName 
           ]);
-          window.location.reload();
+
+          setTimeout(function() {
+            window.location.reload();
+          }, 1000);
         },
         (error: AppError) => {
-          console.log(error);
-
-          if(error instanceof BadRequestError)
-            return this.displayAlert({ type: 'alert-danger', message: error.error.json().error });
+          if(error instanceof BadRequestError) {
+            this.contextErrorAlert.message = error.error.json();
+            return this.displayAlert(this.contextErrorAlert);
+          }
 
           throw error;
         }
       );
   }
 
-  closeAlert(): void {
-    this.hey = false;
-  }
+  closeAlert(): void { this.isAlertOpen = false; }
 
   private displayAlert(alert: Alert): void {
-    this.hey=true;
-    this.alertMessage = alert.message;
-    this.alertType = alert.type;
+    this.isAlertOpen=true;
+    this.alert = alert;
   }
 }
