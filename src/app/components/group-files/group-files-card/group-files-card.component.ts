@@ -14,29 +14,29 @@ import { AppError } from './../../../common/errors/app-error';
   styleUrls: ['./group-files-card.component.css']
 })
 export class GroupFilesCardComponent implements OnInit, OnChanges {
-  @Input('title') title: string;
-  @Input('type')  type:  string;
-  @Input('groupId') groupId: number;
+  @Input('title')         title: string;
+  @Input('type')          type: string;
   @Input('groupFileName') groupFileName: string;
+  @Input('groupId')       groupId: number;
 
   @Output('groupFileAdded') groupFileAdded = new EventEmitter<Alert>();
 
-  groupFile:     File;
   selectedGroupFileName: string;
-  isLoading:     boolean;
+  isLoading:             boolean;
+  groupFile:             File;
+  fileUploadedAlert:     Alert;
 
   constructor(private groupService: GroupService) {}
 
   ngOnInit() {
     this.groupFileName = '';
+    this.fileUploadedAlert = {
+      type:    'alert-success',
+      message: 'El archivo se agregó correctamente.'
+    };
   }
 
-  ngOnChanges(changes: any) {
-    this.groupFileName = changes.groupFileName.currentValue;
-
-    if(this.groupFileName == undefined)
-      return;
-  }
+  ngOnChanges(changes: any) { this.groupFileName = changes.groupFileName.currentValue; }
 
   selectFile(file: File): void {
     if(file == undefined)
@@ -48,26 +48,22 @@ export class GroupFilesCardComponent implements OnInit, OnChanges {
 
   uploadFile(): void {
     let groupFileFormData = new FormData();
-    groupFileFormData.append('fileType', this.type);
+    groupFileFormData.append('fileType',  this.type);
     groupFileFormData.append('groupFile', this.groupFile, this.selectedGroupFileName);
 
-    this.isLoading = true;    
+    this.isLoading = true;
     this.groupService.uploadFile(groupFileFormData, this.groupId)
       .finally(() => this.isLoading = false)
       .subscribe(
-      response => {
-        this.groupFileName = response.json().groupFileName;
-        this.selectedGroupFileName = '';
-        this.groupFile = null;
-        this.groupFileAdded.emit({
-          type: 'alert-success',
-          message: 'El archivo se agregó correctamente.'
-        });
-      }, 
-      (error: AppError) => {
-        throw error;
-      }
-    );
+        groupFileName => {
+          this.groupFileName = groupFileName;
+          
+          this.selectedGroupFileName = '';
+          this.groupFile = null;
+
+          this.groupFileAdded.emit(this.fileUploadedAlert);
+        }
+      );
   }
 
   downloadFile(): void {
@@ -75,6 +71,8 @@ export class GroupFilesCardComponent implements OnInit, OnChanges {
       return;
 
     this.groupService.downloadFile(this.groupId, this.type)
-      .subscribe(response => downloadFileAs(response.blob(), this.groupFileName));
+      .subscribe(
+        file => downloadFileAs(file, this.groupFileName)
+      );
   }
 }

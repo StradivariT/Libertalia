@@ -59,12 +59,13 @@ export class HttpService {
 
   uploadFile(data: any, id: number): Observable<any> {
     return this.http.post(this.url + this.endpoint + '/' + id + '/file' + this.token, data)
+      .map(response => { return response.json(); })
       .catch(this.handleError);
   }
 
   protected handleError(error: Response): Observable<any> {
     if(error.status == 400)
-      return Observable.throw(new BadRequestError(error));
+      return Observable.throw(new BadRequestError());
 
     if(error.status == 401)
       return Observable.throw(new InvalidCredentialsError());
