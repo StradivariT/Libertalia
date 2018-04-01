@@ -31,6 +31,9 @@ export class ActivitiesHeaderComponent implements OnInit, OnChanges {
   activitySelected:        Activity;
   activities:              Activity[];
 
+  private activityAddedAlert:  Alert;
+  private studentUpdatedAlert: Alert;
+
   constructor(
     private activitiesService: ActivitiesService,
     private studentsService:   StudentsService
@@ -39,16 +42,26 @@ export class ActivitiesHeaderComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.activities = [];
     this.studentSelected = this.studentSelectedEditable = {
-      id: 0,
+      id:     0,
       number: 0,
-      name: ""
+      name:   ""
     };
 
     this.newActivity = {
-      id: 0,
-      name: "",
-      fileName: "",
+      id:           0,
+      name:         "",
+      fileName:     "",
       turnedInDate: null
+    };
+
+    this.activityAddedAlert = {
+      type:    'alert-success',
+      message: 'La actividad se agregó correctamente.'
+    };
+
+    this.studentUpdatedAlert = {
+      type:    'alert-success',
+      message: 'La información del alumno se actualizó correctamente.'
     };
   }
 
@@ -59,9 +72,9 @@ export class ActivitiesHeaderComponent implements OnInit, OnChanges {
       return;
   
     this.studentSelectedEditable = {
-      id: this.studentSelected.id,
+      id:     0,
       number: this.studentSelected.number,
-      name: this.studentSelected.name
+      name:   this.studentSelected.name
     };
 
     this.activities = [];
@@ -71,11 +84,9 @@ export class ActivitiesHeaderComponent implements OnInit, OnChanges {
     this.activitiesService.getAll(this.studentSelected.id)
       .finally(() => this.isLoading = false)
       .subscribe(
-        response => {
-          this.activities = response.json().activities as Activity[];
-          this.activitySelected = this.activities[0];
-          this.emitActivitySelected();
-          this.noActivities.emit(false);
+        activities => {
+          this.activities = activities as Activity[];
+          this.selectActivity(this.activities[0]);
         },
         (error: AppError) => {
           if(error instanceof NotFoundError)
@@ -90,74 +101,12 @@ export class ActivitiesHeaderComponent implements OnInit, OnChanges {
     return activity1 && activity2 ? activity1.id == activity2.id : activity1 === activity2;
   }
 
-  isStudentSelectedEditableNotValid(): boolean {
-    return (!this.studentSelectedEditable.number || !this.studentSelectedEditable.name) || 
-      (this.studentSelectedEditable.number == this.studentSelected.number && this.studentSelectedEditable.name == this.studentSelected.name);
-  }
-
-  updateStudentInfo(): void {
-    this.isLoadingModal = true;
-
-    this.studentsService.update({name: this.studentSelectedEditable.name, number: this.studentSelectedEditable.number}, this.studentSelected.id)
-      .finally(() => this.isLoadingModal = false)
-      .subscribe(
-        response => {
-          this.studentSelected.name = response.json().name;
-          this.studentSelected.number = response.json().number;
-          this.closeEditStudentModal();
-          this.alertEmitter.emit({
-            type: 'alert-success',
-            message: 'La información del alumno se actualizó correctamente.'
-          });
-        },
-        (error: AppError) => {
-          throw error;
-        }
-      );
-  }
-
-  closeEditStudentModal(): void {
-    this.isEditStudentModalOpen = false;
-    this.studentSelectedEditable.name = this.studentSelected.name;
-    this.studentSelectedEditable.number = this.studentSelected.number;
-  }
-
   selectFile(file: File): void {
     if(file == undefined)
       return;
   
     this.newActivity.fileName = file.name;
     this.newActivity.file = file;
-  }
-
-  addActivity(): void {
-    let activityFormData = new FormData();
-    activityFormData.append('newActivityName', this.newActivity.name);
-    activityFormData.append('turnedInDate', this.newActivity.turnedInDate);
-    activityFormData.append('newActivityFile', this.newActivity.file, this.newActivity.fileName);
-
-    this.isLoadingModal = true;
-
-    this.activitiesService.create(activityFormData, this.studentSelected.id)
-      .finally(() => this.isLoadingModal = false)
-      .subscribe(
-        response => {
-          this.activities.push(response.json().newActivity as Activity);
-
-          if(this.activities.length == 1) {
-            this.activitySelected = this.activities[0];
-            this.noActivities.emit(false);
-            this.emitActivitySelected();
-          }
-
-          this.closeAddActivityModal();
-          this.alertEmitter.emit({
-            type: 'alert-success',
-            message: 'La actividad se agregó correctamente.'
-          });
-        },
-        (error: AppError) =>{ throw error; }
-      );
   }
 
   isNewActivityNotValid(): boolean {
@@ -168,15 +117,73 @@ export class ActivitiesHeaderComponent implements OnInit, OnChanges {
     this.isAddActivityModalOpen = false;
 
     this.newActivity = {
-      id: 0,
-      name: "",
-      fileName: "",
+      id:           0,
+      name:         "",
+      fileName:     "",
       turnedInDate: null,
-      file: null
+      file:         null
     };
   }
 
-  emitActivitySelected(): void {
+  addActivity(): void {
+    let activityFormData = new FormData();
+    activityFormData.append('name',         this.newActivity.name);
+    activityFormData.append('turnedInDate', this.newActivity.turnedInDate);
+    activityFormData.append('file',         this.newActivity.file, this.newActivity.fileName);
+
+    this.isLoadingModal = true;
+
+    this.activitiesService.create(activityFormData, this.studentSelected.id)
+      .finally(() => this.isLoadingModal = false)
+      .subscribe(
+        newActivity => {
+          this.activities.push(newActivity as Activity);
+
+          if(this.activities.length == 1)
+            this.selectActivity(this.activities[0]);
+
+          this.closeAddActivityModal();
+          this.alertEmitter.emit(this.activityAddedAlert);
+        }
+      );
+  }
+
+  selectActivity(activity: Activity): void {
+    this.noActivities.emit(false);
+
+    this.activitySelected = activity;
     this.activitySelectedEmitter.emit(this.activitySelected);
+  }
+
+  isStudentSelectedEditableNotValid(): boolean {
+    return (!this.studentSelectedEditable.number || !this.studentSelectedEditable.name) || 
+      (this.studentSelectedEditable.number == this.studentSelected.number && this.studentSelectedEditable.name == this.studentSelected.name);
+  }
+
+  closeEditStudentModal(): void {
+    this.isEditStudentModalOpen = false;
+    this.studentSelectedEditable.name = this.studentSelected.name;
+    this.studentSelectedEditable.number = this.studentSelected.number;
+  }
+
+  updateStudent(): void {
+    let updatedStudent = {
+      name:   this.studentSelectedEditable.name,
+      number: this.studentSelectedEditable.number 
+    };
+
+    this.isLoadingModal = true;
+
+    this.studentsService.update(updatedStudent, this.studentSelected.id)
+      .finally(() => this.isLoadingModal = false)
+      .subscribe(
+        updatedStudent => {
+          this.studentSelected.name = updatedStudent.name;
+          this.studentSelected.number = updatedStudent.number;
+          
+          this.closeEditStudentModal();
+          this.alertEmitter.emit(this.studentUpdatedAlert);
+        }
+      );
   }
 }

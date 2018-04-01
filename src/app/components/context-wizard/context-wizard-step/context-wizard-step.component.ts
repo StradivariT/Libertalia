@@ -7,6 +7,7 @@ import { EducPlanService } from './../../../services/educ-plan/educ-plan.service
 
 import { Context } from './../../../common/interfaces/context';
 import { ContextResource } from '../../../common/interfaces/context-resource';
+import { SelectedResource } from './../../../common/interfaces/selected-resource';
 
 import { AppError } from './../../../common/errors/app-error';
 import { NotFoundError } from './../../../common/errors/not-found-error';
@@ -18,11 +19,11 @@ import { BadRequestError } from './../../../common/errors/bad-request-error';
   styleUrls: ['./context-wizard-step.component.css']
 })
 export class ContextWizardStepComponent implements OnInit {
-  @Input("currentStep") currentStep: number;
-  @Input("context")     context:     Context;
+  @Input('currentStep') currentStep: number;
+  @Input('context')     context:     Context;
 
-  @Output("emptyResources")   emptyResources   = new EventEmitter<boolean>();
-  @Output("selectedResource") selectedResource = new EventEmitter<object>();
+  @Output('emptyResources')   emptyResources   = new EventEmitter<boolean>();
+  @Output('selectedResource') selectedResource = new EventEmitter<object>();
 
   newResource:      string;
   isLoading:        boolean;
@@ -58,22 +59,24 @@ export class ContextWizardStepComponent implements OnInit {
   }
 
   addResource(): void {
+    let parentId = this.previousResource ? this.previousResource.id : null;
+
+    let newResource = {
+      newResource: this.newResource
+    };
+
     this.isLoading = true;
     this.resourceAdded = false;
     this.resourceError = false;
 
-    let parentId = this.previousResource ? this.previousResource.id : null;
-
-    this.resourceServices[this.currentStep].create({newResource: this.newResource}, parentId)
+    this.resourceServices[this.currentStep].create(newResource, parentId)
       .finally(() => this.isLoading = false)
       .subscribe(
-        response => {
-          this.contextResources.push(response.json().newResource as ContextResource);
+        newResource => {
+          this.contextResources.push(newResource as ContextResource);
 
-          if(this.contextResources.length == 1) {
-            this.resourceSelected = this.contextResources[0];
-            this.emitSelectedResource(this.resourceSelected);
-          }
+          if(this.contextResources.length == 1)
+            this.emitSelectedResource(this.contextResources[0]);
             
           this.newResource = '';
           this.resourceAdded = true;
@@ -93,7 +96,6 @@ export class ContextWizardStepComponent implements OnInit {
       return;
 
     this.previousResource = previousResource;
-
     this.getResources(this.resourceServices[this.currentStep], this.previousResource.id);
   }
 
@@ -109,11 +111,10 @@ export class ContextWizardStepComponent implements OnInit {
     resourceService.getAll(parentId)
       .finally(() => this.isLoading = false)
       .subscribe(
-        response => {
-          this.contextResources = response.json().resources as ContextResource[];
+        resources => {
+          this.contextResources = resources as ContextResource[];
           this.emptyResources.emit(false);
 
-          this.resourceSelected = this.contextResources[0];
           this.emitSelectedResource(this.contextResources[0]);
         },
         (error: AppError) => {
@@ -126,9 +127,12 @@ export class ContextWizardStepComponent implements OnInit {
   }
 
   private emitSelectedResource(contextResource: ContextResource): void {
-    this.selectedResource.emit({
+    let selectedResource: SelectedResource = {
       contextResource: contextResource,
       step: this.currentStep
-    });
+    };
+
+    this.resourceSelected = contextResource;
+    this.selectedResource.emit(selectedResource);
   }
 }

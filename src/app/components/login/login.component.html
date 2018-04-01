@@ -17,7 +17,7 @@
                             required
                             email
                             ngModel
-                            [disabled]="isLoggingIn"
+                            [disabled]="isLoading"
                             type="email"
                             id="email"
                             name="email"
@@ -38,7 +38,7 @@
                         <input
                             required
                             ngModel
-                            [disabled]="isLoggingIn"
+                            [disabled]="isLoading"
                             type="password"
                             id="password"
                             name="password"
@@ -52,26 +52,28 @@
                 <button
                     type="submit"
                     class="btn btn-primary btn-block"
-                    [disabled]="loginForm.form.invalid || isLoggingIn">
+                    [disabled]="loginForm.form.invalid || isLoading">
                 iniciar sesión
                 </button>
             </form>
         </div>
     </div>
 
-    <div class="row flex-items-xs-center">
-        <div class="col-xs-5">
-            <clr-alert [clrAlertType]="'alert-danger'" [(clrAlertClosed)]="!failedLoginMessage">
+    <div class="row flex-items-xs-center" *ngIf="invalidCredentials">
+        <div class="col-xs-5" >
+            <clr-alert
+                [clrAlertType]="'alert-danger'"
+                (clrAlertClosedChange)="closeAlert()">
                 <div class="alert-item">
                     <span class="alert-text">
-                        {{ failedLoginMessage }}
+                        La información ingresada es incorrecta.
                     </span>
                 </div>
             </clr-alert>
         </div>
     </div>
 
-    <div class="row flex-items-xs-center" id="login-spinner" *ngIf="isLoggingIn">
+    <div class="row flex-items-xs-center" id="login-spinner" *ngIf="isLoading">
         <spinner></spinner>
     </div>
 </div>

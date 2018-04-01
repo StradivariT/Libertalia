@@ -7,11 +7,12 @@ import { AuthService } from 'app/services/auth/auth.service';
 export class SessionGuard implements CanActivate {
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router:      Router
   ) {}
   
   canActivate(): boolean {
-    if(!this.authService.isAuthenticated()) return true;
+    if(!this.authService.isAuthenticated())
+      return true;
 
     this.router.navigate(['/context']);
     return false

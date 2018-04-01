@@ -26,6 +26,8 @@ export class NavbarComponent implements OnInit {
   courseInfoEditable:           string;
   contextSelected:              any;
 
+  private updatedCourseAlert: Alert
+
   constructor(
     private authService:   AuthService,
     private courseService: CourseService,
@@ -36,11 +38,16 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.contextSelected = this.route.snapshot.params;
     this.courseInfo = 'No hay información para el curso.'
+    
+    this.updatedCourseAlert = {
+      type:    'alert-success',
+      message: 'La información del curso se actualizó correctamente.'
+    };
 
     this.courseService.getSingle(this.contextSelected.courseId)
       .subscribe(
-        response => {
-          this.courseInfo = response.json().information;
+        courseInfo => {
+          this.courseInfo = courseInfo;
           this.courseInfoEditable = this.courseInfo;
         },
         (error: AppError) => {
@@ -52,12 +59,24 @@ export class NavbarComponent implements OnInit {
 
           throw error;
         }
-      )
+      );
   }
 
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/']);
+  updateCourseInfo(): void {
+    let updatedCourseInfo = {
+      information: this.courseInfoEditable
+    };
+
+    this.isLoading = true;
+    this.courseService.update(updatedCourseInfo, this.contextSelected.courseId)
+      .finally(() => this.isLoading = false)
+      .subscribe(
+        updatedCourse => {
+          this.courseInfo = updatedCourse.information;
+          this.closeEditCourseInfoModal();
+          this.courseInfoUpdated.emit(this.updatedCourseAlert);
+        }
+      );
   }
 
   closeEditCourseInfoModal(): void {
@@ -66,27 +85,7 @@ export class NavbarComponent implements OnInit {
     this.courseInfoEditable = this.courseInfo;
   }
 
-  updateCourseInfo(): void {
-    this.isLoading = true;
-
-    this.courseService.update({information: this.courseInfoEditable}, this.contextSelected.courseId)
-      .finally(() => this.isLoading = false)
-      .subscribe(
-        response => {
-          this.courseInfo = response.json().information;
-          this.closeEditCourseInfoModal();
-          this.courseInfoUpdated.emit({
-            type: 'alert-success',
-            message: 'La información del curso se actualizó correctamente.'
-          });
-        },
-        (error: AppError) => {
-          throw error;
-        }
-      );
-  }
-
-  changeRoute(route: string): void {
+  navigateWithContextParams(route: string): void {
     this.router.navigate(
       [
         route,
@@ -98,5 +97,10 @@ export class NavbarComponent implements OnInit {
         this.contextSelected.groupName
       ]
     ); 
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/']);
   }
 }

@@ -21,12 +21,13 @@ export class StudentsComponent implements OnInit {
   @Output('studentSelected') studentSelected = new EventEmitter<Student>();
 
   groupId:               number;
-  studentIDSelected:     number;
-  newStudentNumber:      number;
+  studentIdSelected:     number;
   isLoading:             boolean;
   isAddStudentModalOpen: boolean;
-  newStudentName:        string;
+  newStudent:            Student;
   students:              Student[];
+
+  private studentAddedAlert: Alert;
 
   constructor(
     private route:           ActivatedRoute,
@@ -37,11 +38,22 @@ export class StudentsComponent implements OnInit {
   ngOnInit() {
     this.groupId = this.route.snapshot.params['groupId'];
     this.students = [];
+    
+    this.newStudent = {
+      id: 0,
+      name: '',
+      number: null
+    };
+
+    this.studentAddedAlert = {
+      type:    'alert-success',
+      message: 'El alumno fue agregado correctamente.'
+    };
 
     this.studentsService.getAll(this.groupId)
       .subscribe(
-        response => {
-          this.students = response.json().students as Student[];
+        students => {
+          this.students = students as Student[];
           this.noStudents.emit(false);
           this.selectStudent(this.students[0]);
         },
@@ -60,38 +72,31 @@ export class StudentsComponent implements OnInit {
   addStudent(): void {
     this.isLoading = true;
 
-    this.studentsService.create({newStudentName: this.newStudentName, newStudentNumber: this.newStudentNumber}, this.groupId)
+    this.studentsService.create(this.newStudent, this.groupId)
       .finally(() => this.isLoading = false)
       .subscribe(
-        response => {
-          this.students.push(response.json().newStudent as Student);
+        newStudent => {
+          this.students.push(newStudent as Student);
 
           this.closeAddStudentModal();
-
-          this.studentAdded.emit({
-            type: 'alert-success',
-            message: 'El alumno fue agregado correctamente.'
-          });
+          this.studentAdded.emit(this.studentAddedAlert);
 
           if(this.students.length == 1) {
             this.noStudents.emit(false);
             this.selectStudent(this.students[0]);
           }
-        },
-        (error: AppError) => {
-          throw error;
         }
       );
   }
 
   closeAddStudentModal(): void {
-    this.newStudentName = "";
-    this.newStudentNumber = null;
+    this.newStudent.name = '';
+    this.newStudent.number = null
     this.isAddStudentModalOpen = false;
   }
 
   selectStudent(student: Student): void {
-    this.studentIDSelected = student.id;
+    this.studentIdSelected = student.id;
     this.studentSelected.emit(student);
   }
 }

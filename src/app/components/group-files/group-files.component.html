@@ -6,10 +6,10 @@
       <div class="row" *ngIf="isAlertOpen">
         <div class="col-xs-12">
           <clr-alert
-            [clrAlertType]="alertType"
+            [clrAlertType]="alert.type"
             (clrAlertClosedChange)="closeAlert()">
             <div clr-alert-item class="alert-item">
-              <span class="alert-text">{{ alertMessage }}</span>
+              <span class="alert-text">{{ alert.message }}</span>
             </div>
           </clr-alert>
         </div>

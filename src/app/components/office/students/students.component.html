@@ -6,11 +6,14 @@
       <li *ngFor="let student of students | orderBy: 'number'">
         <a
           class="nav-link"
-          [class.active]="studentIDSelected == student.id"
+          [class.active]="studentIdSelected == student.id"
           (click)="selectStudent(student)">
-        {{ student.number }} - {{ student.name }}</a>
+        {{ student.number }} - {{ student.name }}
+        </a>
       </li>
-      <li><a class="nav-link" (click)="isAddStudentModalOpen = true">Agregar alumno</a></li>
+      <li>
+        <a class="nav-link" (click)="isAddStudentModalOpen = true">Agregar alumno</a>
+      </li>
     </ul>
   </section>
 </section>
@@ -26,19 +29,17 @@
       <div class="col-xs-4">
         <input
           type="number"
-          size="99"
           placeholder="Número del alumno"
           [disabled]="isLoading"
-          [(ngModel)]="newStudentNumber">
+          [(ngModel)]="newStudent.number">
       </div>
       
       <div class="col-xs-8">
         <input
           type="text"
-          size="99"
           placeholder="Nombre del alumno"
           [disabled]="isLoading"
-          [(ngModel)]="newStudentName">
+          [(ngModel)]="newStudent.name">
       </div>
     </div>
   </div>
@@ -53,12 +54,14 @@
       class="btn btn-outline"
       [disabled]="isLoading"
       (click)="closeAddStudentModal()">
-    Cancelar</button>
+    Cancelar
+    </button>
     <button
       type="button"
       class="btn btn-primary"
-      [disabled]="newStudentName == '' || newStudentName == null || newStudentNumber == null || isLoading"
+      [disabled]="!newStudent.name || !newStudent.number || isLoading"
       (click)="addStudent()">
-    Agregar</button>
+    Agregar
+    </button>
   </div>
 </clr-modal>

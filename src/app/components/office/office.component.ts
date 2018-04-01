@@ -13,11 +13,10 @@ import { Student } from '../../common/interfaces/student';
 export class OfficeComponent implements OnInit {
   @ViewChild('activities') activities: ActivitiesComponent;
 
-  alertMessage:    string;
-  alertType:       string;
   isAlertOpen:     boolean;
   noStudents:      boolean;
   isLoading:       boolean;
+  alert:           Alert;
   studentSelected: Student;
 
   constructor(private changeDetector: ChangeDetectorRef) {}
@@ -27,10 +26,9 @@ export class OfficeComponent implements OnInit {
     this.noStudents = true;
   }
 
-  displayAlert(alertInfo: Alert): void {
+  displayAlert(alert: Alert): void {
     this.isAlertOpen = true;
-    this.alertMessage = alertInfo.message;
-    this.alertType = alertInfo.type;
+    this.alert = alert;
   }
 
   displayNoStudents(noStudents: boolean) {

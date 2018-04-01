@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GroupService } from './../../services/group/group.service';
 
 import { Alert } from './../../common/interfaces/alert';
+import { GroupFileNames } from './../../common/interfaces/group-file-names';
 
 import { AppError } from './../../common/errors/app-error';
 import { BadRequestError } from './../../common/errors/bad-request-error';
@@ -14,30 +15,31 @@ import { BadRequestError } from './../../common/errors/bad-request-error';
   styleUrls: ['./group-files.component.css']
 })
 export class GroupFilesComponent implements OnInit {
-  groupId:    number;
-  groupFileNames: any;
-  isLoading: boolean;
-  alertMessage:    string;
-  alertType:       string;
-  isAlertOpen:     boolean
+  groupId:        number;
+  isAlertOpen:    boolean;
+  isLoading:      boolean;
+  alert:          Alert;
+  groupFileNames: GroupFileNames;
 
   constructor(
     private groupService: GroupService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) { }
+    private router:       Router,
+    private route:        ActivatedRoute
+  ) {}
 
   ngOnInit() {
     this.groupId = this.route.snapshot.params.groupId;
-    this.groupFileNames = {};
+    this.groupFileNames = {
+      participantsFileName: '',
+      incidentsFileName:    '',
+      evaluationsFileName:  ''
+    };
 
     this.isLoading = true;
     this.groupService.getSingle(this.groupId)
       .finally(() => this.isLoading = false)
       .subscribe(
-        response => {
-          this.groupFileNames = response.json().groupFileNames;
-        },
+        groupFileNames => this.groupFileNames = groupFileNames as GroupFileNames,
         (error: AppError) => {
           if(error instanceof BadRequestError)
             return this.router.navigate(['/context']);
@@ -47,10 +49,9 @@ export class GroupFilesComponent implements OnInit {
       );
   }
 
-  displayAlert(alertInfo: Alert): void {
+  displayAlert(alert: Alert): void {
     this.isAlertOpen = true;
-    this.alertMessage = alertInfo.message;
-    this.alertType = alertInfo.type;
+    this.alert = alert;
   }
 
   closeAlert(): void { this.isAlertOpen = false; }

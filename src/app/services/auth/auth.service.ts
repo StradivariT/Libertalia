@@ -3,26 +3,24 @@ import { Http, Response } from '@angular/http';
 
 import { tokenNotExpired } from 'angular2-jwt';
 
+import { HttpService } from './../http/http.service';
+
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
 
-import { AppError } from './../../common/errors/app-error';
-import { InvalidCredentialsError } from './../../common/errors/invalid-credentials-error';
+import { Credentials } from './../../common/interfaces/credentials';
 
 @Injectable()
-export class AuthService {
-  private url = 'http://localhost:8000/api/';
+export class AuthService extends HttpService {
+  constructor(http: Http) { super(http, '/login', ''); }
 
-  constructor(private http: Http) {}
-
-  login(email: string, password: string): Observable<Response> {
-    return this.http.post(this.url + 'login', {email: email, password: password})
+  login(credentials: Credentials): Observable<Response> {
+    return this.http.post(this.url + this.endpoint, credentials)
       .map((response: Response) => {
-        const token = response.json().token;
-
+        const token = response.json();
         localStorage.setItem('token', token);
+
         return null;
       })
       .catch(this.handleError);
@@ -31,11 +29,4 @@ export class AuthService {
   logout(): void { localStorage.removeItem('token'); }
 
   isAuthenticated(): boolean { return tokenNotExpired(); }
-
-  private handleError(error: Response): Observable<Response> {
-    if(error.status == 401)
-      return Observable.throw(new InvalidCredentialsError());
-
-    return Observable.throw(new AppError(error));
-  }
 }
