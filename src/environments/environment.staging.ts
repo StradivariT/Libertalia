@@ -1,7 +1,7 @@
 export const environment = {
-  production: false
+    production: true
 };
 
 export const unexpectedErrorMessage = 'Ocurrió un error con el servidor, intenta de nuevo.';
 
-export const shambhalaURL = 'http://localhost:8000/api';
+export const shambhalaURL = 'https://www.shambhala.ml/api';

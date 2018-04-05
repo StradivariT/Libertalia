@@ -103,6 +103,16 @@ export class ContextWizardStepComponent implements OnInit {
     return resource1 && resource2 ? resource1.id == resource2.id : resource1 === resource2;
   }
 
+  emitSelectedResource(contextResource: ContextResource): void {
+    let selectedResource: SelectedResource = {
+      contextResource: contextResource,
+      step: this.currentStep
+    };
+
+    this.resourceSelected = contextResource;
+    this.selectedResource.emit(selectedResource);
+  }
+
   private getResources(resourceService: HttpService, parentId?: number): void {
     this.isLoading = true;
     this.contextResources = [];
@@ -124,15 +134,5 @@ export class ContextWizardStepComponent implements OnInit {
           throw error;
         }
       );
-  }
-
-  private emitSelectedResource(contextResource: ContextResource): void {
-    let selectedResource: SelectedResource = {
-      contextResource: contextResource,
-      step: this.currentStep
-    };
-
-    this.resourceSelected = contextResource;
-    this.selectedResource.emit(selectedResource);
   }
 }

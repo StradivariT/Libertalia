@@ -11,7 +11,6 @@ import { ToastyModule } from 'ng2-toasty';
 import { ClarityModule } from "@clr/angular";
 
 import { AuthService } from './services/auth/auth.service';
-import { HttpService } from './services/http/http.service';
 import { GroupService } from './services/group/group.service';
 import { AuthGuard } from './services/auth/auth-guard.service';
 import { CourseService } from './services/course/course.service';
@@ -71,7 +70,6 @@ import { AppErrorHandler } from './common/errors/app-error-handler';
   ],
   providers: [
     AuthGuard,
-    HttpService,
     AuthService,
     GroupService,
     SessionGuard,

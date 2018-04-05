@@ -13,10 +13,9 @@ import { NotFoundError } from './../../common/errors/not-found-error';
 import { BadRequestError } from './../../common/errors/bad-request-error';
 import { InvalidCredentialsError } from './../../common/errors/invalid-credentials-error';
 
-@Injectable()
 export class HttpService {
-  protected url:   string;
-  protected token: string;
+  protected url:          string;
+  protected token:        string;
 
   constructor(
     protected http:         Http,

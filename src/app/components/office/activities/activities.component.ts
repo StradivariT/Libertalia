@@ -5,6 +5,7 @@ import { ActivitiesDescriptionComponent } from './activities-description/activit
 
 import { Alert } from './../../../common/interfaces/alert';
 import { Student } from '../../../common/interfaces/student';
+import { Activity } from './../../../common/interfaces/activity';
 
 @Component({
   selector: 'activities',
@@ -19,7 +20,8 @@ export class ActivitiesComponent {
 
   @Output('alertEmitter') alertEmitter = new EventEmitter<Alert>();
 
-  noActivities: boolean;
+  noActivities:     boolean;
+  activitySelected: Activity;
 
   displayAlert(alert: Alert): void { this.alertEmitter.emit(alert); }
 }

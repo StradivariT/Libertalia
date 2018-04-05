@@ -97,7 +97,7 @@ export class ContextEditComponent implements OnInit {
 
   closeAlert(): void { this.isAlertOpen = false; }
 
-  private displayAlert(alert: Alert): void {
+  displayAlert(alert: Alert): void {
     this.isAlertOpen=true;
     this.alert = alert;
   }
