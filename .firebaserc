@@ -1,7 +1,7 @@
 {
   "projects": {
     "default": "libertalia-7b8de-staging",
-    "prod": "libertalia-7b8de-prod",
-    "staging": "libertalia-7b8de-staging"
+    "staging": "libertalia-7b8de-staging",
+    "production": "libertalia-7b8de-prod"
   }
 }
