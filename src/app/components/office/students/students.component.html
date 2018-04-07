@@ -54,14 +54,14 @@
       class="btn btn-outline"
       [disabled]="isLoading"
       (click)="closeAddStudentModal()">
-    Cancelar
+    cancelar
     </button>
     <button
       type="button"
       class="btn btn-primary"
       [disabled]="!newStudent.name || !newStudent.number || isLoading"
       (click)="addStudent()">
-    Agregar
+    agregar
     </button>
   </div>
 </clr-modal>

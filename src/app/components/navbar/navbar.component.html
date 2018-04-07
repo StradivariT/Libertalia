@@ -72,14 +72,14 @@
       class="btn btn-outline"
       [disabled]="isLoading"
       (click)="closeEditCourseInfoModal()">
-    cerrar
+    cancelar
     </button>
     <button
       type="button"
       class="btn btn-primary"
       [disabled]="!courseInfoEditable || courseInfoEditable == courseInfo || isLoading"
       (click)="updateCourseInfo()">
-    actualizar
+    guardar cambios
     </button>
   </div>
 </clr-modal>

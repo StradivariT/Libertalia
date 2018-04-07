@@ -7,5 +7,6 @@
 }
 
 .feedback-incidents {
-    white-space: pre;
+    white-space: pre-line;
+    word-wrap: break-word;
 }
