@@ -1,5 +1,8 @@
 <div class="main-container">
-  <navbar (courseInfoUpdated)="displayAlert($event)"></navbar>
+  <navbar
+    (courseInfoUpdated)="displayAlert($event)"
+    (groupIncidentsUpdated)="displayAlert($event)">
+  </navbar>
 
   <div class="content-container">
     <div class="content-area">
@@ -36,12 +39,17 @@
       </activities>
     </div>
 
-    <nav class="sidenav">
+    
+
+    <!-- <nav class="sidenav"> -->
+        <clr-vertical-nav>
       <students
         (studentAdded)="displayAlert($event)"
         (noStudents)="displayNoStudents($event)"
         (studentSelected)="studentSelected = $event">
       </students>
-    </nav>
+    <!-- </nav> -->
+</clr-vertical-nav>
+    
   </div>
 </div>

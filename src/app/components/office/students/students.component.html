@@ -1,22 +1,11 @@
-<section class="sidenav-content">
-  <section class="nav-group">
-    <label>Alumnos</label>
-    
-    <ul class="nav-list">
-      <li *ngFor="let student of students | orderBy: 'number'">
-        <a
-          class="nav-link"
-          [class.active]="studentIdSelected == student.id"
-          (click)="selectStudent(student)">
-        {{ student.number }} - {{ student.name }}
-        </a>
-      </li>
-      <li>
-        <a class="nav-link" (click)="isAddStudentModalOpen = true">Agregar alumno</a>
-      </li>
-    </ul>
-  </section>
-</section>
+<a
+  clrVerticalNavLink 
+  *ngFor="let student of students | orderBy: 'number'"
+  [class.active]="studentIdSelected == student.id"
+  (click)="selectStudent(student)">
+{{ student.number }} - {{ student.name }}
+</a>
+<a clrVerticalNavLink (click)="isAddStudentModalOpen = true">Agregar alumno</a>
 
 <clr-modal
   [clrModalSize]="'lg'"

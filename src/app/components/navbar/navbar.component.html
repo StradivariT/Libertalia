@@ -21,6 +21,12 @@
     </a>
   </div>
 
+  <div class="header-nav">
+    <a class="nav-link nav-text" (click)="isGroupIncidentsModalOpen = true">
+      Incidencias del grupo
+    </a>
+  </div>
+
   <div class="header-actions">
     <clr-dropdown>
       <button class="nav-icon" clrDropdownTrigger>
@@ -79,6 +85,53 @@
       class="btn btn-primary"
       [disabled]="!courseInfoEditable || courseInfoEditable == courseInfo || isLoading"
       (click)="updateCourseInfo()">
+    guardar cambios
+    </button>
+  </div>
+</clr-modal>
+
+<clr-modal
+  [clrModalSize]="'xl'"
+  [clrModalClosable]="false"
+  [clrModalStaticBackdrop]="true"
+  [(clrModalOpen)]="isGroupIncidentsModalOpen">
+  <h3 class="modal-title">
+    Incidencias del grupo: {{ contextSelected.groupName }}
+    &nbsp;
+    <clr-icon
+      id="edit-incidents-icon"
+      shape="edit"
+      (click)="isGroupIncidentsTextAreaOpen = !isGroupIncidentsTextAreaOpen">
+    </clr-icon>
+  </h3>
+
+  <div class="modal-body">
+    <p id="group-incidents" *ngIf="!isGroupIncidentsTextAreaOpen">{{ groupIncidents }}</p>
+    <textarea
+      *ngIf="isGroupIncidentsTextAreaOpen"
+      rows="3"
+      [disabled]="isLoading"
+      [(ngModel)]="groupIncidentsEditable">
+    </textarea>
+  </div>
+
+  <div class="modal-footer">
+    <div class="modal-spinner">
+      <spinner *ngIf="isLoading"></spinner>
+    </div>
+  
+    <button
+      type="button"
+      class="btn btn-outline"
+      [disabled]="isLoading"
+      (click)="closeGroupIncidentsModal()">
+    cancelar
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="!groupIncidentsEditable || groupIncidentsEditable == groupIncidents || isLoading"
+      (click)="updateGroupIncidents()">
     guardar cambios
     </button>
   </div>
