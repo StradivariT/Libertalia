@@ -1,11 +1,6 @@
-#edit-student-modal-spinner {
-    margin-right: 24em;
+.modal-spinner {
     padding-top: 0.6em;
-}
-
-#add-activity-modal-spinner {
-    margin-right: 29em;
-    padding-top: 0.6em;
+    text-align: right;
 }
 
 #add-activity-modal-date {
@@ -30,4 +25,8 @@ input[type=number] {
 
 input[type=date] {
     width: 55%;
+}
+
+select option {
+    font-size: 1.1em;
 }

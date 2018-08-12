@@ -1,10 +1,10 @@
-.nav-text:hover, #edit-info-icon:hover, #edit-incidents-icon:hover, .title:hover {
+.nav-text:hover, #edit-info-icon:hover, #edit-incidents-icon:hover, .title:hover, .tooltip:hover {
     cursor: pointer;
 }
 
 .modal-spinner {
-    margin-right: 45em;
     padding-top: 0.6em;
+    text-align: right;
 }
 
 #course-info, #group-incidents {

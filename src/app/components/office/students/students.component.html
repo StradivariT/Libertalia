@@ -31,26 +31,32 @@
           [(ngModel)]="newStudent.name">
       </div>
     </div>
-  </div>
 
-  <div class="modal-footer">
-    <div class="modal-spinner">
-      <spinner *ngIf="isLoading"></spinner>
+    <br>
+
+    <div class="row">
+      <div class="col-xs-9">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!newStudent.name || !newStudent.number || isLoading"
+          (click)="addStudent()">
+        agregar
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline"
+          [disabled]="isLoading"
+          (click)="closeAddStudentModal()">
+        cancelar
+        </button>
+      </div>
+
+      <div class="col-xs-3 flex-xs-middle">
+        <div class="modal-spinner">
+          <spinner *ngIf="isLoading"></spinner>
+        </div>
+      </div>
     </div>
-
-    <button
-      type="button"
-      class="btn btn-outline"
-      [disabled]="isLoading"
-      (click)="closeAddStudentModal()">
-    cancelar
-    </button>
-    <button
-      type="button"
-      class="btn btn-primary"
-      [disabled]="!newStudent.name || !newStudent.number || isLoading"
-      (click)="addStudent()">
-    agregar
-    </button>
   </div>
 </clr-modal>

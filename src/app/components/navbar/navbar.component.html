@@ -4,42 +4,52 @@
   </div>
 
   <div class="header-nav">
-    <span class="nav-link nav-text">
+    <span class="nav-link nav-text tooltip tooltip-md tooltip-bottom-right" [routerLink]="['/context']" role="tooltip" aria-haspopup="true">
       Plan educativo: {{ contextSelected.educPlanName }} / Curso: {{ contextSelected.courseName }} / Grupo: {{ contextSelected.groupName }} 
+      <span class="tooltip-content">Seleccionar contexto</span>
     </span>
   </div>
 
-  <div class="header-nav">
-    <a class="nav-link nav-text" (click)="isEditCourseInfoModalOpen = true">
-     Información del curso 
+  <div class="header-nav" (click)="navigateWithContextParams('/office')">
+    <a class="nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip" aria-haspopup="true">
+      <clr-icon shape="home"></clr-icon>
+      <span class="tooltip-content">Oficina</span>
     </a>
   </div>
 
-  <div class="header-nav">
-    <a class="nav-link nav-text" (click)="navigateWithContextParams('/groupFiles')">
-      Archivos del grupo
+  <div class="header-nav" (click)="isEditCourseInfoModalOpen = true">
+    <a class="nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip" aria-haspopup="true">
+      <clr-icon shape="info-standard"></clr-icon>
+      <span class="tooltip-content">Información del curso</span>
     </a>
   </div>
 
-  <div class="header-nav">
-    <a class="nav-link nav-text" (click)="isGroupIncidentsModalOpen = true">
-      Incidencias del grupo
+  <div class="header-nav" (click)="navigateWithContextParams('/groupFiles')">
+    <a class="nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip" aria-haspopup="true">
+      <clr-icon shape="folder"></clr-icon>
+      <span class="tooltip-content">Archivos del grupo</span>
     </a>
   </div>
 
-  <div class="header-actions">
-    <clr-dropdown>
-      <button class="nav-icon" clrDropdownTrigger>
-        <clr-icon shape="cog"></clr-icon>
-      </button>
+  <div class="header-nav" (click)="isGroupIncidentsModalOpen = true">
+    <a class="nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip" aria-haspopup="true">
+      <clr-icon shape="warning-standard"></clr-icon>
+      <span class="tooltip-content">Incidencias del grupo</span>
+    </a>
+  </div>
 
-      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-        <a clrDropdownItem (click)="navigateWithContextParams('/office')">Oficina</a>
-        <a clrDropdownItem [routerLink]="['/context']">Seleccionar contexto</a>
-        <a clrDropdownItem (click)="navigateWithContextParams('/contextEdit')">Editar contexto</a>
-        <a clrDropdownItem (click)="logout()">Cerrar sesión</a>
-      </clr-dropdown-menu>
-    </clr-dropdown>
+  <div class="header-nav" (click)="navigateWithContextParams('/contextEdit')">
+    <a class="nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip" aria-haspopup="true">
+      <clr-icon shape="pencil"></clr-icon>
+      <span class="tooltip-content">Editar contexto</span>
+    </a>
+  </div>
+
+  <div class="header-nav" (click)="logout()">
+    <a class="nav-link nav-icon tooltip tooltip-md tooltip-bottom-right" role="tooltip" aria-haspopup="true">
+      <clr-icon shape="logout"></clr-icon>
+      <span class="tooltip-content">Cerrar sesión</span>
+    </a>
   </div>
 </header>
 
@@ -66,27 +76,33 @@
       [disabled]="isLoading"      
       [(ngModel)]="courseInfoEditable">
     </textarea>
-  </div>
 
-  <div class="modal-footer">
-    <div class="modal-spinner">
-      <spinner *ngIf="isLoading"></spinner>
+    <br>
+
+    <div class="row">
+      <div class="col-xs-9">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!courseInfoEditable || courseInfoEditable == courseInfo || isLoading"
+          (click)="updateCourseInfo()">
+        guardar cambios
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline"
+          [disabled]="isLoading"
+          (click)="closeEditCourseInfoModal()">
+        cancelar
+        </button>
+      </div>
+
+      <div class="col-xs-3 flex-xs-middle">
+        <div class="modal-spinner">
+          <spinner *ngIf="isLoading"></spinner>
+        </div>
+      </div>
     </div>
-  
-    <button
-      type="button"
-      class="btn btn-outline"
-      [disabled]="isLoading"
-      (click)="closeEditCourseInfoModal()">
-    cancelar
-    </button>
-    <button
-      type="button"
-      class="btn btn-primary"
-      [disabled]="!courseInfoEditable || courseInfoEditable == courseInfo || isLoading"
-      (click)="updateCourseInfo()">
-    guardar cambios
-    </button>
   </div>
 </clr-modal>
 
@@ -113,26 +129,32 @@
       [disabled]="isLoading"
       [(ngModel)]="groupIncidentsEditable">
     </textarea>
-  </div>
 
-  <div class="modal-footer">
-    <div class="modal-spinner">
-      <spinner *ngIf="isLoading"></spinner>
+    <br>
+
+    <div class="row">
+      <div class="col-xs-9">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!groupIncidentsEditable || groupIncidentsEditable == groupIncidents || isLoading"
+          (click)="updateGroupIncidents()">
+        guardar cambios
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline"
+          [disabled]="isLoading"
+          (click)="closeGroupIncidentsModal()">
+        cancelar
+        </button>
+      </div>
+
+      <div class="col-xs-3 flex-xs-middle">
+        <div class="modal-spinner">
+          <spinner *ngIf="isLoading"></spinner>
+        </div>
+      </div>
     </div>
-  
-    <button
-      type="button"
-      class="btn btn-outline"
-      [disabled]="isLoading"
-      (click)="closeGroupIncidentsModal()">
-    cancelar
-    </button>
-    <button
-      type="button"
-      class="btn btn-primary"
-      [disabled]="!groupIncidentsEditable || groupIncidentsEditable == groupIncidents || isLoading"
-      (click)="updateGroupIncidents()">
-    guardar cambios
-    </button>
   </div>
 </clr-modal>

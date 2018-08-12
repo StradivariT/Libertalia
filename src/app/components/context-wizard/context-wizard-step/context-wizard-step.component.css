@@ -1,3 +1,7 @@
 input {
     width: 100%
 }
+
+select option {
+    font-size: 1.1em;
+}

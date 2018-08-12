@@ -1,9 +1,6 @@
 .modal-spinner {
-    margin-right: 29em;
-}
-
-.modal-footer {
-    margin-top: 1em;
+    padding-top: 0.6em;
+    text-align: right;
 }
 
 a:hover {

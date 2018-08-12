@@ -1,18 +1,18 @@
 <div class="row">
-  <div class="col-xs-7">
-    <h3>
-      Actividades de: {{ studentSelected.name }}&nbsp;
-      <clr-icon shape="edit" id="edit-student-icon" (click)="isEditStudentModalOpen = true"></clr-icon>
-    </h3>
-  </div>
-
-  <div class="col-xs-2 push-xs-2">
+  <div class="col-xs-2">
     <button
       id="add-activity-button"
       class="btn btn-outline"
       (click)="isAddActivityModalOpen = true">
       <clr-icon shape="plus"></clr-icon>&nbsp;agregar actividad
     </button>
+  </div>
+
+  <div class="col-xs-10">
+    <h3>
+      Actividades de: {{ studentSelected.name }}&nbsp;
+      <clr-icon shape="edit" id="edit-student-icon" (click)="isEditStudentModalOpen = true"></clr-icon>
+    </h3>
   </div>
 </div>
 
@@ -65,28 +65,33 @@
           [(ngModel)]="studentSelectedEditable.name">
       </div>
     </div>
-  </div>
 
-  <div class="modal-footer">
-    <div id="edit-student-modal-spinner" *ngIf="isLoadingModal">
-      <spinner></spinner>
+    <br>
+
+    <div class="row">
+      <div class="col-xs-9">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="isStudentSelectedEditableNotValid() || isLoadingModal"
+          (click)="updateStudent()">
+        guardar cambios
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline"
+          [disabled]="isLoadingModal"
+          (click)="closeEditStudentModal()">
+        cancelar
+        </button>
+      </div>
+
+      <div class="col-xs-3 flex-xs-middle">
+        <div class="modal-spinner" *ngIf="isLoadingModal">
+          <spinner></spinner>
+        </div>
+      </div>
     </div>
-  
-    <button
-      type="button"
-      class="btn btn-outline"
-      [disabled]="isLoadingModal"
-      (click)="closeEditStudentModal()">
-    cancelar
-    </button>
-
-    <button
-      type="button"
-      class="btn btn-primary"
-      [disabled]="isStudentSelectedEditableNotValid() || isLoadingModal"
-      (click)="updateStudent()">
-    guardar cambios
-    </button>
   </div>
 </clr-modal>
 
@@ -110,6 +115,20 @@
     <br>
     
     <div class="row flex-items-bottom">
+      <div class="col-xs-5" id="add-activity-modal-date">
+        <label for="turned-in-date">Fecha entregada</label>
+        &nbsp;&nbsp;&nbsp;
+        <input
+          type="date"
+          id="turned-in-date" 
+          [disabled]="isLoadingModal"
+          [(ngModel)]="newActivity.turnedInDate">
+      </div>
+    </div>
+
+    <br>
+
+    <div class="row flex-items-bottom">
       <div class="col-xs-7">
         <button
           class="btn btn-primary"
@@ -126,38 +145,33 @@
           #activityFileInput
           hidden>
       </div>
+    </div>
 
-      <div class="col-xs-5" id="add-activity-modal-date">
-        <label for="turned-in-date">Fecha entregada</label>
-        &nbsp;&nbsp;&nbsp;
-        <input
-          type="date"
-          id="turned-in-date" 
+    <br>
+
+    <div class="row">
+      <div class="col-xs-9">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="isNewActivityNotValid() || isLoadingModal"
+          (click)="addActivity()">
+        agregar
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline"
           [disabled]="isLoadingModal"
-          [(ngModel)]="newActivity.turnedInDate">
+          (click)="closeAddActivityModal()">
+        cancelar
+        </button>
+      </div>
+
+      <div class="col-xs-3 flex-xs-middle">
+        <div class="modal-spinner" *ngIf="isLoadingModal">
+          <spinner></spinner>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="modal-footer">
-    <div id="add-activity-modal-spinner" *ngIf="isLoadingModal">
-      <spinner></spinner>
-    </div>
-  
-    <button
-      type="button"
-      class="btn btn-outline"
-      [disabled]="isLoadingModal"
-      (click)="closeAddActivityModal()">
-    cancelar
-    </button>
-
-    <button
-      type="button"
-      class="btn btn-primary"
-      [disabled]="isNewActivityNotValid() || isLoadingModal"
-      (click)="addActivity()">
-    agregar
-    </button>
   </div>
 </clr-modal>
