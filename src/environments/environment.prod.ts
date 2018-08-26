@@ -4,4 +4,4 @@ export const environment = {
 
 export const unexpectedErrorMessage = 'Ocurrió un error con el servidor, intenta de nuevo.';
 
-export const shambhalaURL = 'https://www.shambhala.ml/api';
+export const shambhalaURL = 'https://www.shambhala.site/api';
